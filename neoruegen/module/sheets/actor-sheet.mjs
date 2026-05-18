@@ -40,6 +40,7 @@ export class NeoruegenActorSheet extends ActorSheet {
 
     // Adding a pointer to CONFIG.NEORUEGEN
     context.config = CONFIG.NEORUEGEN;
+    context.skillGroups = this._prepareSkillGroups(context.system.skills);
 
     // Enrich biography info for display
     // Enrichment turns text like `[[/r 1d20]]` into buttons
@@ -58,6 +59,26 @@ export class NeoruegenActorSheet extends ActorSheet {
     return context;
   }
 
+  _prepareSkillGroups(skills) {
+    const buildSkillContext = (key) => {
+      const skill = skills[key];
+      const config = CONFIG.NEORUEGEN.skills[key];
+
+      return {
+        key,
+        value: skill.value,
+        label: game.i18n.localize(config.label),
+        attributeKey: config.attribute,
+        attribute: game.i18n.localize(CONFIG.NEORUEGEN.attributes[config.attribute]),
+      };
+    };
+
+    return {
+      core: CONFIG.NEORUEGEN.skillGroups.core.map(buildSkillContext),
+      advanced: CONFIG.NEORUEGEN.skillGroups.advanced.map(buildSkillContext),
+    };
+  }
+
   /* -------------------------------------------- */
 
   /** @override */
@@ -68,30 +89,58 @@ export class NeoruegenActorSheet extends ActorSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.isEditable) return;
 
-    // Rollable fields.
-    html.on('click', '.rollable', this._onRoll.bind(this));
+    html.on('click', '.skill-roll', this._onSkillRoll.bind(this));
   }
 
   /**
-   * Handle clickable rolls.
+   * Handle skill checks.
    * @param {Event} event   The originating click event
    * @private
    */
-  _onRoll(event) {
+  async _onSkillRoll(event) {
     event.preventDefault();
-    const element = event.currentTarget;
-    const dataset = element.dataset;
+    const skillKey = event.currentTarget.dataset.skill;
+    const skillConfig = CONFIG.NEORUEGEN.skills[skillKey];
 
-    // Handle rolls that supply the formula directly.
-    if (dataset.roll) {
-      let label = dataset.label ? `[ability] ${dataset.label}` : '';
-      let roll = new Roll(dataset.roll, this.actor.getRollData());
-      roll.toMessage({
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: label,
-        rollMode: game.settings.get('core', 'rollMode'),
-      });
-      return roll;
-    }
+    if (!skillConfig) return;
+
+    const skillValue = Number(this.actor.system.skills[skillKey]?.value ?? 0);
+    const attributeKey = skillConfig.attribute;
+    const attributeValue = Number(this.actor.system.attributes[attributeKey]?.value ?? 0);
+    const diceCount = Math.max(skillValue + attributeValue, 0);
+    const skillLabel = game.i18n.localize(skillConfig.label);
+    const attributeLabel = game.i18n.localize(CONFIG.NEORUEGEN.attributes[attributeKey]);
+    const formula = diceCount > 0 ? `${diceCount}d12` : '0';
+    const roll = await new Roll(formula).evaluate();
+    const dice = roll.dice.flatMap((die) => die.results.map((result) => result.result));
+    const successes = dice.filter((result) => result >= 10).length;
+    const isSuccess = successes > 0;
+    const comboPoints = Math.max(successes - 1, 0);
+    const formattedDice = dice.map((result) => {
+      if (result < 10) return String(result);
+      return `<strong style="color: green;">${result}</strong>`;
+    });
+    const resultLine = isSuccess
+      ? '<strong style="color: green;">Erfolg!</strong>'
+      : '<strong style="color: red;">Misserfolg!</strong>';
+    const comboLine = comboPoints > 0
+      ? `${comboPoints} Combo-Punkte generiert`
+      : 'Keine Combo-Punkte generiert';
+    const content = `
+      <p><strong>${skillLabel}</strong> <span>(${attributeLabel})</span></p>
+      <p>${skillValue} + ${attributeValue} = ${diceCount}W12</p>
+      <p>${formattedDice.length ? formattedDice.join(', ') : '-'}</p>
+      <p>${resultLine}</p>
+      ${isSuccess ? `<p>${comboLine}</p>` : ''}
+    `;
+
+    await roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      flavor: `${skillLabel} Probe`,
+      content,
+      rollMode: game.settings.get('core', 'rollMode'),
+    });
+
+    return roll;
   }
 }

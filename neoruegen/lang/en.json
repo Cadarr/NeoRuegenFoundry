@@ -1,5 +1,8 @@
 {
   "NEORUEGEN": {
+    "Action": {
+      "Check": "Probe"
+    },
     "Attribute": {
       "Koerper": "Körper",
       "Verstand": "Verstand",
@@ -18,10 +21,8 @@
       "Schusswaffen": "Schusswaffen",
       "Taktik": "Taktik",
       "SchwereWaffen": "Schwere Waffen",
-      "Panzerung": "Panzerung",
       "Einschuechtern": "Einschüchtern",
       "Hacking": "Hacking",
-      "Netzwerke": "Netzwerke",
       "Elektronik": "Elektronik",
       "Drohnensteuerung": "Drohnensteuerung",
       "Sensorik": "Sensorik",
@@ -29,14 +30,14 @@
       "Chemie": "Chemie",
       "Verhandeln": "Verhandeln",
       "Taeuschen": "Täuschen",
-      "Stil": "Stil",
       "Sicherheitssysteme": "Sicherheitssysteme",
       "Verkleidung": "Verkleidung",
       "Konstruktion": "Konstruktion",
+      "Kraftakt": "Kraftakt",
       "Programmierung": "Programmierung",
+      "Stil": "Stil",
       "Navigation": "Navigation",
       "Schmuggel": "Schmuggel",
-      "Handel": "Handel",
       "Buerokratie": "Bürokratie"
     },
     "Sheet": {
@@ -47,6 +48,9 @@
     },
     "SheetLabels": {
       "Actor": "Neoruegen-Charakterbogen"
+    },
+    "Token": {
+      "ComboThreat": "Combo/Bedrohung"
     }
   },
   "TYPES": {

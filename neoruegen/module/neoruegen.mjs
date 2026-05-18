@@ -5,6 +5,7 @@ import { NeoruegenActorSheet } from './sheets/actor-sheet.mjs';
 // Import helper/utility classes and constants.
 import { preloadHandlebarsTemplates } from './helpers/templates.mjs';
 import { NEORUEGEN } from './helpers/config.mjs';
+import { registerTokenComboThreat } from './token-combo-threat.mjs';
 // Import DataModel classes.
 import * as models from './data/_module.mjs';
 
@@ -56,3 +57,5 @@ Hooks.once('init', function () {
 Handlebars.registerHelper('toLowerCase', function (str) {
   return str.toLowerCase();
 });
+
+registerTokenComboThreat();

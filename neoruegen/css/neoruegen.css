@@ -10,6 +10,43 @@
   cursor: pointer;
 }
 
+.neoruegen-token-combo-threat {
+  align-items: center;
+  display: flex;
+  height: auto;
+  min-height: 36px;
+  width: 112px;
+}
+.neoruegen-token-combo-threat label {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+.neoruegen-token-combo-threat span {
+  font-size: 10px;
+  line-height: 1.1;
+  text-align: center;
+}
+.neoruegen-token-combo-threat input {
+  height: 20px;
+  text-align: center;
+  width: 38px;
+}
+.neoruegen-token-combo-threat button {
+  flex: 0 0 22px;
+  height: 20px;
+  line-height: 1;
+  padding: 0;
+}
+
+.neoruegen-token-combo-threat-stepper {
+  align-items: center;
+  display: flex;
+  gap: 3px;
+}
+
 .grid,
 .grid-2col {
   display: grid;
@@ -251,4 +288,37 @@
 }
 .neoruegen .resource-label {
   font-weight: bold;
+}
+.neoruegen .skill {
+  break-inside: avoid;
+  margin-bottom: 4px;
+}
+.neoruegen .skill .resource-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.neoruegen .skill small {
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 1;
+  opacity: 0.72;
+}
+.neoruegen .skill input {
+  flex: 0 0 42px;
+}
+.neoruegen .skill button {
+  flex: 0 0 64px;
+  line-height: 1.2;
+  margin-left: 6px;
+}
+.neoruegen .skills {
+  column-count: 2;
+  column-gap: 20px;
+  display: block;
+}
+.neoruegen .skills-advanced {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.18);
 }

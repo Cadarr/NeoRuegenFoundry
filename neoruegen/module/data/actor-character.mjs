@@ -14,7 +14,12 @@ export default class NeoruegenCharacter extends NeoruegenActorBase {
       return obj;
     }, {}));
 
-    schema.skills = new SchemaField(Object.keys(CONFIG.NEORUEGEN.skills).reduce((obj, skill) => {
+    const skills = [
+      ...CONFIG.NEORUEGEN.skillGroups.core,
+      ...CONFIG.NEORUEGEN.skillGroups.advanced,
+    ];
+
+    schema.skills = new SchemaField(skills.reduce((obj, skill) => {
       obj[skill] = new SchemaField({
         value: new NumberField({ ...requiredInteger, initial: 0, min: 0, max: 4 }),
       });

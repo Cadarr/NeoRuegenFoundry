@@ -30,11 +30,27 @@
 
         <section class="main grid-span-2">
           <h2>{{localize "NEORUEGEN.Sheet.Skills"}}</h2>
-          <div class="skills grid grid-2col">
-            {{#each system.skills as |skill key|}}
+          <div class="skills">
+            {{#each skillGroups.core as |skill|}}
             <div class="skill flexrow flex-group-center">
-              <label for="system.skills.{{key}}.value" class="resource-label flexlarge align-left">{{localize (lookup @root.config.skills key)}}</label>
-              <input type="text" name="system.skills.{{key}}.value" value="{{skill.value}}" data-dtype="Number"/>
+              <label for="system.skills.{{skill.key}}.value" class="resource-label flexlarge align-left">
+                <span>{{skill.label}}</span>
+                <small>{{skill.attribute}}</small>
+              </label>
+              <input type="text" name="system.skills.{{skill.key}}.value" value="{{skill.value}}" data-dtype="Number"/>
+              <button type="button" class="skill-roll" data-skill="{{skill.key}}">{{localize "NEORUEGEN.Action.Check"}}</button>
+            </div>
+            {{/each}}
+          </div>
+          <div class="skills skills-advanced">
+            {{#each skillGroups.advanced as |skill|}}
+            <div class="skill flexrow flex-group-center">
+              <label for="system.skills.{{skill.key}}.value" class="resource-label flexlarge align-left">
+                <span>{{skill.label}}</span>
+                <small>{{skill.attribute}}</small>
+              </label>
+              <input type="text" name="system.skills.{{skill.key}}.value" value="{{skill.value}}" data-dtype="Number"/>
+              <button type="button" class="skill-roll" data-skill="{{skill.key}}">{{localize "NEORUEGEN.Action.Check"}}</button>
             </div>
             {{/each}}
           </div>

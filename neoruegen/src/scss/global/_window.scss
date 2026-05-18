@@ -10,3 +10,44 @@
     cursor: pointer;
   }
 }
+
+.neoruegen-token-combo-threat {
+  align-items: center;
+  display: flex;
+  height: auto;
+  min-height: 36px;
+  width: 112px;
+
+  label {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+  }
+
+  span {
+    font-size: 10px;
+    line-height: 1.1;
+    text-align: center;
+  }
+
+  input {
+    height: 20px;
+    text-align: center;
+    width: 38px;
+  }
+
+  button {
+    flex: 0 0 22px;
+    height: 20px;
+    line-height: 1;
+    padding: 0;
+  }
+}
+
+.neoruegen-token-combo-threat-stepper {
+  align-items: center;
+  display: flex;
+  gap: 3px;
+}

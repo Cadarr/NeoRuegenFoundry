@@ -1,34 +1,37 @@
 const MODULE_ID = 'neoruegen';
-const FLAG_KEY = 'comboThreat';
-const TYPE_FLAG_KEY = 'comboThreatType';
-const THREAT_TYPE = 'threat';
-const COMBO_TYPE = 'combo';
+const COMBO_FLAG_KEY = 'combo';
+const THREAT_FLAG_KEY = 'threat';
 
-function getComboThreat(document) {
-  return Number(document.getFlag(MODULE_ID, FLAG_KEY) ?? 0);
+function getPoolValue(document, key) {
+  return Number(document.getFlag(MODULE_ID, key) ?? 0);
 }
 
-function getComboThreatType(document) {
-  return document.getFlag(MODULE_ID, TYPE_FLAG_KEY) === COMBO_TYPE ? COMBO_TYPE : THREAT_TYPE;
-}
-
-async function setComboThreat(document, value) {
+async function setPoolValue(document, key, value) {
   const parsed = Math.max(Number.parseInt(value, 10) || 0, 0);
 
   if (parsed > 0) {
-    await document.setFlag(MODULE_ID, FLAG_KEY, parsed);
+    await document.setFlag(MODULE_ID, key, parsed);
   }
   else {
-    await document.unsetFlag(MODULE_ID, FLAG_KEY);
+    await document.unsetFlag(MODULE_ID, key);
   }
-}
-
-async function setComboThreatType(document, type) {
-  await document.setFlag(MODULE_ID, TYPE_FLAG_KEY, type === COMBO_TYPE ? COMBO_TYPE : THREAT_TYPE);
 }
 
 function getHudElement(html) {
   return html instanceof HTMLElement ? html : html[0];
+}
+
+function buildPoolControl(tokenDocument, key, label) {
+  return `
+    <div class="neoruegen-token-pool" data-pool="${key}">
+      <span>${label}</span>
+      <div class="neoruegen-token-pool-stepper">
+        <button type="button" data-action="decrease">-</button>
+        <input type="number" min="0" step="1" value="${getPoolValue(tokenDocument, key)}">
+        <button type="button" data-action="increase">+</button>
+      </div>
+    </div>
+  `;
 }
 
 function renderTokenHUD(app, html) {
@@ -43,65 +46,56 @@ function renderTokenHUD(app, html) {
   control.classList.add('control-icon', 'neoruegen-token-combo-threat');
   control.title = game.i18n.localize('NEORUEGEN.Token.ComboThreat');
   control.innerHTML = `
-    <select aria-label="${game.i18n.localize('NEORUEGEN.Token.ComboThreat')}">
-      <option value="${THREAT_TYPE}">${game.i18n.localize('NEORUEGEN.Token.Threat')}</option>
-      <option value="${COMBO_TYPE}">${game.i18n.localize('NEORUEGEN.Token.Combo')}</option>
-    </select>
-    <div class="neoruegen-token-combo-threat-stepper">
-      <button type="button" data-action="decrease">-</button>
-      <input type="number" min="0" step="1" value="${getComboThreat(tokenDocument)}">
-      <button type="button" data-action="increase">+</button>
-    </div>
+    ${buildPoolControl(tokenDocument, COMBO_FLAG_KEY, game.i18n.localize('NEORUEGEN.Token.Combo'))}
+    ${buildPoolControl(tokenDocument, THREAT_FLAG_KEY, game.i18n.localize('NEORUEGEN.Token.Threat'))}
   `;
 
-  const input = control.querySelector('input');
-  const select = control.querySelector('select');
+  const inputs = control.querySelectorAll('input');
   const buttons = control.querySelectorAll('button');
-  select.value = getComboThreatType(tokenDocument);
-  input.addEventListener('change', async (event) => {
-    await setComboThreat(tokenDocument, event.currentTarget.value);
-    drawTokenComboThreat(token);
-  });
-  input.addEventListener('click', (event) => event.stopPropagation());
-  input.addEventListener('pointerdown', (event) => event.stopPropagation());
-  select.addEventListener('change', async (event) => {
-    await setComboThreatType(tokenDocument, event.currentTarget.value);
-    drawTokenComboThreat(token);
-  });
-  select.addEventListener('click', (event) => event.stopPropagation());
-  select.addEventListener('pointerdown', (event) => event.stopPropagation());
+  for (const input of inputs) {
+    input.addEventListener('change', async (event) => {
+      const pool = event.currentTarget.closest('.neoruegen-token-pool').dataset.pool;
+      await setPoolValue(tokenDocument, pool, event.currentTarget.value);
+      drawTokenComboThreat(token);
+    });
+    input.addEventListener('click', (event) => event.stopPropagation());
+    input.addEventListener('pointerdown', (event) => event.stopPropagation());
+  }
   for (const button of buttons) {
     button.addEventListener('click', async (event) => {
       event.preventDefault();
       event.stopPropagation();
 
-      const current = getComboThreat(tokenDocument);
+      const poolElement = event.currentTarget.closest('.neoruegen-token-pool');
+      const pool = poolElement.dataset.pool;
+      const input = poolElement.querySelector('input');
+      const current = getPoolValue(tokenDocument, pool);
       const next = event.currentTarget.dataset.action === 'increase'
         ? current + 1
         : Math.max(current - 1, 0);
 
-      await setComboThreat(tokenDocument, next);
+      await setPoolValue(tokenDocument, pool, next);
       input.value = next;
       drawTokenComboThreat(token);
     });
     button.addEventListener('pointerdown', (event) => event.stopPropagation());
   }
 
+  control.addEventListener('click', (event) => event.stopPropagation());
+  control.addEventListener('pointerdown', (event) => event.stopPropagation());
+
   rightColumn.append(control);
 }
 
-function drawTokenComboThreat(token) {
-  if (!token) return;
+function destroyTokenPoolTexts(token) {
+  token.neoruegenComboText?.destroy();
+  token.neoruegenThreatText?.destroy();
+  token.neoruegenComboText = null;
+  token.neoruegenThreatText = null;
+}
 
-  token.neoruegenComboThreatText?.destroy();
-  token.neoruegenComboThreatText = null;
-
-  const value = getComboThreat(token.document);
-  if (value <= 0) return;
-
-  const type = getComboThreatType(token.document);
-  const stroke = type === COMBO_TYPE ? '#1b5cff' : '#7d1717';
-  const text = new PIXI.Text(String(value), {
+function createTokenPoolText(value, stroke) {
+  return new PIXI.Text(String(value), {
     fill: '#ffffff',
     fontFamily: 'Roboto, sans-serif',
     fontSize: 24,
@@ -109,13 +103,33 @@ function drawTokenComboThreat(token) {
     stroke,
     strokeThickness: 5,
   });
+}
 
-  text.anchor.set(1, 0);
-  text.position.set(token.w - 4, 4);
-  text.zIndex = 1000;
+function drawTokenComboThreat(token) {
+  if (!token) return;
 
-  token.addChild(text);
-  token.neoruegenComboThreatText = text;
+  destroyTokenPoolTexts(token);
+
+  const combo = getPoolValue(token.document, COMBO_FLAG_KEY);
+  const threat = getPoolValue(token.document, THREAT_FLAG_KEY);
+
+  if (combo > 0) {
+    const text = createTokenPoolText(combo, '#1b5cff');
+    text.anchor.set(0, 0);
+    text.position.set(4, 4);
+    text.zIndex = 1000;
+    token.addChild(text);
+    token.neoruegenComboText = text;
+  }
+
+  if (threat > 0) {
+    const text = createTokenPoolText(threat, '#7d1717');
+    text.anchor.set(1, 0);
+    text.position.set(token.w - 4, 4);
+    text.zIndex = 1000;
+    token.addChild(text);
+    token.neoruegenThreatText = text;
+  }
 }
 
 export function registerTokenComboThreat() {

@@ -51,7 +51,7 @@
     },
     "Token": {
       "Combo": "Combo",
-      "ComboThreat": "Combo/Bedrohung",
+      "ComboThreat": "Combo und Bedrohung",
       "Threat": "Bedrohung"
     }
   },

@@ -17,21 +17,9 @@
   gap: 3px;
   display: flex;
   height: auto;
-  min-height: 44px;
+  min-height: 80px;
   padding: 4px;
-  width: 82px;
-
-  input {
-    height: 20px;
-    text-align: center;
-    width: 38px;
-  }
-
-  select {
-    height: 20px;
-    font-size: 11px;
-    width: 74px;
-  }
+  width: 92px;
 
   button {
     flex: 0 0 22px;
@@ -41,7 +29,25 @@
   }
 }
 
-.neoruegen-token-combo-threat-stepper {
+.neoruegen-token-pool {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.neoruegen-token-pool span {
+  font-size: 10px;
+  line-height: 1;
+}
+
+.neoruegen-token-pool input {
+  height: 20px;
+  text-align: center;
+  width: 34px;
+}
+
+.neoruegen-token-pool-stepper {
   align-items: center;
   display: flex;
   gap: 3px;

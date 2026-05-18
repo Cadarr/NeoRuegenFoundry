@@ -136,10 +136,20 @@ export class NeoruegenActorSheet extends ActorSheet {
     const comboLine = comboPoints > 0
       ? `${comboPoints} Combo-Punkte generiert`
       : 'Keine Combo-Punkte generiert';
+    const maneuverComboCost = rollOptions.maneuver?.combo ?? 0;
+    let spentCombo = 0;
+    if (targetDocument && maneuverComboCost > 0) {
+      const currentCombo = getTokenPoolValue(targetDocument, COMBO_FLAG_KEY);
+      spentCombo = Math.min(currentCombo, maneuverComboCost);
+      await setTokenPoolValue(targetDocument, COMBO_FLAG_KEY, currentCombo - spentCombo);
+    }
     if (targetDocument && comboPoints > 0) {
       const currentCombo = getTokenPoolValue(targetDocument, COMBO_FLAG_KEY);
       await setTokenPoolValue(targetDocument, COMBO_FLAG_KEY, currentCombo + comboPoints);
     }
+    const spentComboLine = targetDocument && spentCombo > 0
+      ? `<p>${spentCombo} Combo-Punkte von ${targetDocument.name} verbraucht</p>`
+      : '';
     const targetLine = targetDocument && comboPoints > 0
       ? `<p>${comboPoints} Combo-Punkte auf ${targetDocument.name} hinzugefügt</p>`
       : '';
@@ -161,6 +171,7 @@ export class NeoruegenActorSheet extends ActorSheet {
       <p>${resultLine}</p>
       ${isSuccess ? `<p>${comboLine}</p>` : ''}
       ${maneuverLine}
+      ${spentComboLine}
       ${targetLine}
     `;
 

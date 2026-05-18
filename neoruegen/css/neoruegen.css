@@ -312,9 +312,26 @@
   flex: 0 0 42px;
 }
 .neoruegen .skill button {
-  flex: 0 0 64px;
-  line-height: 1.2;
+  align-items: center;
+  background: transparent;
+  border: 0;
+  display: inline-flex;
+  flex: 0 0 32px;
+  height: 32px;
+  justify-content: center;
+  line-height: 1;
   margin-left: 6px;
+  padding: 0;
+  width: 32px;
+}
+.neoruegen .skill button svg {
+  fill: #111;
+  height: 28px;
+  overflow: visible;
+  width: 100%;
+}
+.neoruegen .skill button:hover svg, .neoruegen .skill button:focus svg {
+  filter: drop-shadow(0 0 3px rgba(122, 27, 27, 0.75));
 }
 .neoruegen .skills {
   column-count: 2;

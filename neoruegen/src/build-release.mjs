@@ -21,7 +21,9 @@ const buildSystemRoot = path.join(buildRoot, packageId);
 const releaseRoot = path.join(repoRoot, 'release', version);
 const releaseZip = path.join(releaseRoot, `${packageId}.zip`);
 const releaseManifest = path.join(releaseRoot, 'system.json');
-const rootZip = path.join(systemRoot, `${packageId}.zip`);
+const latestRoot = path.join(repoRoot, 'release', 'latest');
+const latestZip = path.join(latestRoot, `${packageId}.zip`);
+const latestManifest = path.join(latestRoot, 'system.json');
 
 const included = [
   'assets',
@@ -48,9 +50,9 @@ function copyCurrentSystem() {
 }
 
 function zipBuild() {
-  fs.rmSync(rootZip, { force: true });
+  fs.rmSync(releaseZip, { force: true });
 
-  const result = spawnSync('zip', ['-r', rootZip, packageId], {
+  const result = spawnSync('zip', ['-r', releaseZip, packageId], {
     cwd: buildRoot,
     encoding: 'utf8',
     stdio: 'pipe',
@@ -62,13 +64,16 @@ function zipBuild() {
 }
 
 function publishRelease() {
-  fs.rmSync(releaseRoot, { recursive: true, force: true });
-  fs.mkdirSync(releaseRoot, { recursive: true });
-  fs.copyFileSync(rootZip, releaseZip);
   fs.copyFileSync(manifestPath, releaseManifest);
+  fs.rmSync(latestRoot, { recursive: true, force: true });
+  fs.mkdirSync(latestRoot, { recursive: true });
+  fs.copyFileSync(releaseZip, latestZip);
+  fs.copyFileSync(manifestPath, latestManifest);
 }
 
 copyCurrentSystem();
+fs.rmSync(releaseRoot, { recursive: true, force: true });
+fs.mkdirSync(releaseRoot, { recursive: true });
 zipBuild();
 publishRelease();
 
@@ -76,3 +81,5 @@ console.log(`Built ${packageId} ${version}`);
 console.log(`Build directory: ${buildSystemRoot}`);
 console.log(`Release manifest: ${releaseManifest}`);
 console.log(`Release zip: ${releaseZip}`);
+console.log(`Latest manifest: ${latestManifest}`);
+console.log(`Latest zip: ${latestZip}`);

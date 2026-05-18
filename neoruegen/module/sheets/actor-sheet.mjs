@@ -67,19 +67,19 @@ export class NeoruegenActorSheet extends ActorSheet {
       const skillConfig = CONFIG.NEORUEGEN.skills[maneuver.skill];
       const attributeKey = skillConfig.attribute;
       const learned = Boolean(maneuvers[key]?.learned);
-      const attributeValue = Number(this.actor.system.attributes[attributeKey]?.value ?? 0);
-      const attributeTooLow = attributeValue < maneuver.skillValue;
+      const currentSkillValue = Number(this.actor.system.skills[maneuver.skill]?.value ?? 0);
+      const skillTooLow = currentSkillValue < maneuver.skillValue;
 
       return {
         key,
         learned,
-        canLearn: learned || !attributeTooLow,
-        attributeTooLow,
+        canLearn: learned || !skillTooLow,
+        skillTooLow,
         label: game.i18n.localize(maneuver.label),
         skill: game.i18n.localize(skillConfig.label),
         skillValue: maneuver.skillValue,
+        currentSkillValue,
         attribute: game.i18n.localize(CONFIG.NEORUEGEN.attributes[attributeKey]),
-        attributeValue,
         complexity: maneuver.complexity,
         complexityLabel: this._getComplexityLabel(maneuver.complexity),
         combo: maneuver.combo,
@@ -244,29 +244,23 @@ export class NeoruegenActorSheet extends ActorSheet {
     }).join('');
     const maneuverRows = maneuvers.length
       ? maneuvers.map((maneuver) => {
-        const maneuverSkillConfig = CONFIG.NEORUEGEN.skills[maneuver.skill];
-        const attributeValue = Number(this.actor.system.attributes[maneuverSkillConfig.attribute]?.value ?? 0);
         const lacksSkill = skillValue < maneuver.skillValue;
-        const lacksAttribute = attributeValue < maneuver.skillValue;
         const lacksCombo = targetDocument && targetCombo < maneuver.combo;
-        const disabled = lacksSkill || lacksAttribute || lacksCombo ? ' disabled' : '';
+        const disabled = lacksSkill || lacksCombo ? ' disabled' : '';
         const classes = disabled ? ' class="maneuver-option disabled"' : ' class="maneuver-option"';
         const requirements = [
           `${game.i18n.localize('NEORUEGEN.Dialog.SkillValue')} ${maneuver.skillValue}`,
-          `${game.i18n.localize('NEORUEGEN.Dialog.AttributeValue')} ${maneuver.skillValue}`,
           `${game.i18n.localize('NEORUEGEN.Token.Combo')} ${maneuver.combo}`,
           `${game.i18n.localize('NEORUEGEN.Dialog.Complexity')} ${maneuver.complexity}`,
         ].join(' | ');
         const reason = lacksSkill
           ? `<em>${game.i18n.localize('NEORUEGEN.Dialog.SkillTooLow')}</em>`
-          : lacksAttribute
-            ? `<em>${game.i18n.localize('NEORUEGEN.Dialog.AttributeTooLow')}</em>`
-            : lacksCombo
-              ? `<em>${game.i18n.localize('NEORUEGEN.Dialog.NotEnoughCombo')}</em>`
-              : '';
+          : lacksCombo
+            ? `<em>${game.i18n.localize('NEORUEGEN.Dialog.NotEnoughCombo')}</em>`
+            : '';
 
         return `
-          <label${classes} data-skill-ok="${lacksSkill || lacksAttribute ? 'false' : 'true'}" data-combo-cost="${maneuver.combo}">
+          <label${classes} data-skill-ok="${lacksSkill ? 'false' : 'true'}" data-combo-cost="${maneuver.combo}">
             <input type="radio" name="maneuver" value="${maneuver.key}"${disabled}>
             <span>
               <strong>${game.i18n.localize(maneuver.label)}</strong>

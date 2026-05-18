@@ -87,11 +87,7 @@
             <dl>
               <div>
                 <dt>{{localize "NEORUEGEN.Dialog.Skill"}}</dt>
-                <dd>{{maneuver.skill}} {{maneuver.skillValue}}</dd>
-              </div>
-              <div>
-                <dt>{{localize "NEORUEGEN.Dialog.Attribute"}}</dt>
-                <dd>{{maneuver.attribute}} {{maneuver.attributeValue}}</dd>
+                <dd>{{maneuver.skill}} {{maneuver.currentSkillValue}} / {{maneuver.skillValue}}</dd>
               </div>
               <div>
                 <dt>{{localize "NEORUEGEN.Dialog.Complexity"}}</dt>
@@ -102,8 +98,8 @@
                 <dd>{{maneuver.combo}}</dd>
               </div>
             </dl>
-            {{#if maneuver.attributeTooLow}}
-            <p class="maneuver-warning">{{localize "NEORUEGEN.Dialog.AttributeTooLow"}}</p>
+            {{#if maneuver.skillTooLow}}
+            <p class="maneuver-warning">{{localize "NEORUEGEN.Dialog.SkillTooLow"}}</p>
             {{/if}}
             <p>{{maneuver.description}}</p>
           </div>

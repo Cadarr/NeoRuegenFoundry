@@ -18,8 +18,6 @@
     },
     "Dialog": {
       "Attribute": "Attribut",
-      "AttributeTooLow": "Attribut zu niedrig.",
-      "AttributeValue": "Attributwert",
       "ComboSpend": "Combo einsetzen",
       "ComboSpendHint": "{combo} Combo auf dem Ziel. Jeder Punkt gibt +2W12.",
       "ComboSpendNoTargetHint": "Bis zu {combo} Combo. Jeder Punkt gibt +2W12.",

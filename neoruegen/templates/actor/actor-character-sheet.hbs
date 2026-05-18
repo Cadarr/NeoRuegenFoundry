@@ -5,16 +5,6 @@
       <h1 class="charname">
         <input name="name" type="text" value="{{actor.name}}" placeholder="{{localize 'NEORUEGEN.Sheet.Character'}}"/>
       </h1>
-      <div class="resources grid grid-3col">
-        {{#each system.attributes as |attribute key|}}
-        <div class="resource flex-group-center">
-          <label for="system.attributes.{{key}}.value" class="resource-label">{{attribute.label}}</label>
-          <div class="resource-content flexrow flex-center flex-between">
-            <input type="number" name="system.attributes.{{key}}.value" value="{{attribute.value}}" min="1" max="6" step="1" data-dtype="Number"/>
-          </div>
-        </div>
-        {{/each}}
-      </div>
     </div>
   </header>
 
@@ -31,8 +21,8 @@
           <div class="attributes flexcol">
             {{#each system.attributes as |attribute key|}}
             <div class="attribute flexrow flex-group-center">
-              <label for="system.attributes.{{key}}.value" class="resource-label flexlarge align-left">{{attribute.label}}</label>
-              <input type="number" name="system.attributes.{{key}}.value" value="{{attribute.value}}" min="1" max="6" step="1" data-dtype="Number"/>
+              <label for="system.attributes.{{key}}.value" class="resource-label flexlarge align-left">{{localize (lookup @root.config.attributes key)}}</label>
+              <input type="text" name="system.attributes.{{key}}.value" value="{{attribute.value}}" data-dtype="Number"/>
             </div>
             {{/each}}
           </div>
@@ -43,8 +33,8 @@
           <div class="skills grid grid-2col">
             {{#each system.skills as |skill key|}}
             <div class="skill flexrow flex-group-center">
-              <label for="system.skills.{{key}}.value" class="resource-label flexlarge align-left">{{skill.label}}</label>
-              <input type="number" name="system.skills.{{key}}.value" value="{{skill.value}}" min="0" max="4" step="1" data-dtype="Number"/>
+              <label for="system.skills.{{key}}.value" class="resource-label flexlarge align-left">{{localize (lookup @root.config.skills key)}}</label>
+              <input type="text" name="system.skills.{{key}}.value" value="{{skill.value}}" data-dtype="Number"/>
             </div>
             {{/each}}
           </div>

@@ -24,17 +24,6 @@ export default class NeoruegenCharacter extends NeoruegenActorBase {
     return schema;
   }
 
-  prepareDerivedData() {
-    super.prepareDerivedData();
-
-    for (const [key, attribute] of Object.entries(this.attributes)) {
-      attribute.label = game.i18n.localize(CONFIG.NEORUEGEN.attributes[key]) ?? key;
-    }
-    for (const [key, skill] of Object.entries(this.skills)) {
-      skill.label = game.i18n.localize(CONFIG.NEORUEGEN.skills[key]) ?? key;
-    }
-  }
-
   getRollData() {
     return {
       attributes: foundry.utils.deepClone(this.attributes),

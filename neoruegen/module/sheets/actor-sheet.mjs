@@ -43,6 +43,7 @@ export class NeoruegenActorSheet extends ActorSheet {
     // Adding a pointer to CONFIG.NEORUEGEN
     context.config = CONFIG.NEORUEGEN;
     context.skillGroups = this._prepareSkillGroups(context.system.skills);
+    context.maneuvers = this._prepareManeuvers(context.system.maneuvers);
 
     // Enrich biography info for display
     // Enrichment turns text like `[[/r 1d20]]` into buttons
@@ -59,6 +60,26 @@ export class NeoruegenActorSheet extends ActorSheet {
     );
 
     return context;
+  }
+
+  _prepareManeuvers(maneuvers) {
+    return Object.entries(CONFIG.NEORUEGEN.maneuvers).map(([key, maneuver]) => {
+      const skillConfig = CONFIG.NEORUEGEN.skills[maneuver.skill];
+      const attributeKey = skillConfig.attribute;
+
+      return {
+        key,
+        learned: Boolean(maneuvers[key]?.learned),
+        label: game.i18n.localize(maneuver.label),
+        skill: game.i18n.localize(skillConfig.label),
+        skillValue: maneuver.skillValue,
+        attribute: game.i18n.localize(CONFIG.NEORUEGEN.attributes[attributeKey]),
+        complexity: maneuver.complexity,
+        complexityLabel: this._getComplexityLabel(maneuver.complexity),
+        combo: maneuver.combo,
+        description: game.i18n.localize(maneuver.description),
+      };
+    });
   }
 
   _prepareSkillGroups(skills) {
@@ -199,7 +220,7 @@ export class NeoruegenActorSheet extends ActorSheet {
 
   async _promptSkillRollOptions(skillKey, skillValue, targetDocument) {
     const maneuvers = Object.entries(CONFIG.NEORUEGEN.maneuvers)
-      .filter(([, maneuver]) => maneuver.skill === skillKey)
+      .filter(([key, maneuver]) => maneuver.skill === skillKey && this.actor.system.maneuvers[key]?.learned)
       .map(([key, maneuver]) => ({ key, ...maneuver }));
     const targetCombo = targetDocument ? getTokenPoolValue(targetDocument, COMBO_FLAG_KEY) : 0;
     const difficultyOptions = Object.entries(CONFIG.NEORUEGEN.difficulties).map(([key, difficulty]) => {

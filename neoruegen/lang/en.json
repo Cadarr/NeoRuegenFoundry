@@ -1,7 +1,8 @@
 {
   "NEORUEGEN": {
     "Action": {
-      "Check": "Probe"
+      "Check": "Probe",
+      "Learned": "Gelernt"
     },
     "Attribute": {
       "Koerper": "Körper",
@@ -80,6 +81,7 @@
       "Attributes": "Attribute",
       "Biography": "Biografie",
       "Character": "Charakter",
+      "Maneuvers": "Manöver",
       "Skills": "Fertigkeiten"
     },
     "SheetLabels": {

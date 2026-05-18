@@ -3,7 +3,7 @@ import NeoruegenActorBase from "./base-actor.mjs";
 export default class NeoruegenCharacter extends NeoruegenActorBase {
 
   static defineSchema() {
-    const { NumberField, SchemaField } = foundry.data.fields;
+    const { BooleanField, NumberField, SchemaField } = foundry.data.fields;
     const requiredInteger = { required: true, nullable: false, integer: true };
     const schema = super.defineSchema();
 
@@ -26,6 +26,13 @@ export default class NeoruegenCharacter extends NeoruegenActorBase {
       return obj;
     }, {}));
 
+    schema.maneuvers = new SchemaField(Object.keys(CONFIG.NEORUEGEN.maneuvers).reduce((obj, maneuver) => {
+      obj[maneuver] = new SchemaField({
+        learned: new BooleanField({ required: true, nullable: false, initial: false }),
+      });
+      return obj;
+    }, {}));
+
     return schema;
   }
 
@@ -33,6 +40,7 @@ export default class NeoruegenCharacter extends NeoruegenActorBase {
     return {
       attributes: foundry.utils.deepClone(this.attributes),
       skills: foundry.utils.deepClone(this.skills),
+      maneuvers: foundry.utils.deepClone(this.maneuvers),
     };
   }
 }

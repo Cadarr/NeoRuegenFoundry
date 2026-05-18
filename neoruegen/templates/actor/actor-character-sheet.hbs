@@ -10,6 +10,7 @@
 
   <nav class="sheet-tabs tabs" data-group="primary">
     <a class="item" data-tab="character">{{localize "NEORUEGEN.Sheet.Character"}}</a>
+    <a class="item" data-tab="maneuvers">{{localize "NEORUEGEN.Sheet.Maneuvers"}}</a>
     <a class="item" data-tab="biography">{{localize "NEORUEGEN.Sheet.Biography"}}</a>
   </nav>
 
@@ -69,6 +70,42 @@
             {{/each}}
           </div>
         </section>
+      </section>
+    </div>
+
+    <div class="tab maneuvers" data-group="primary" data-tab="maneuvers">
+      <section class="maneuver-catalog">
+        {{#each maneuvers as |maneuver|}}
+        <article class="maneuver-entry">
+          <label class="maneuver-learn">
+            <input type="checkbox" name="system.maneuvers.{{maneuver.key}}.learned" {{checked maneuver.learned}}
+              data-dtype="Boolean" />
+            <span>{{localize "NEORUEGEN.Action.Learned"}}</span>
+          </label>
+          <div class="maneuver-content">
+            <h3>{{maneuver.label}}</h3>
+            <dl>
+              <div>
+                <dt>{{localize "NEORUEGEN.Dialog.Skill"}}</dt>
+                <dd>{{maneuver.skill}} {{maneuver.skillValue}}</dd>
+              </div>
+              <div>
+                <dt>{{localize "NEORUEGEN.Dialog.Attribute"}}</dt>
+                <dd>{{maneuver.attribute}}</dd>
+              </div>
+              <div>
+                <dt>{{localize "NEORUEGEN.Dialog.Complexity"}}</dt>
+                <dd>{{maneuver.complexityLabel}} (-{{maneuver.complexity}})</dd>
+              </div>
+              <div>
+                <dt>{{localize "NEORUEGEN.Token.Combo"}}</dt>
+                <dd>{{maneuver.combo}}</dd>
+              </div>
+            </dl>
+            <p>{{maneuver.description}}</p>
+          </div>
+        </article>
+        {{/each}}
       </section>
     </div>
 

@@ -1,4 +1,4 @@
-import { COMBO_FLAG_KEY, getTokenPoolValue, setTokenPoolValue } from '../token-combo-threat.mjs';
+import { COMBO_FLAG_KEY, adjustTokenPoolValue, getTokenPoolValue } from '../token-combo-threat.mjs';
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -171,11 +171,9 @@ export class NeoruegenActorSheet extends ActorSheet {
     if (targetDocument && totalComboCost > 0) {
       const currentCombo = getTokenPoolValue(targetDocument, COMBO_FLAG_KEY);
       spentCombo = Math.min(currentCombo, totalComboCost);
-      await setTokenPoolValue(targetDocument, COMBO_FLAG_KEY, currentCombo - spentCombo);
     }
-    if (targetDocument && comboPoints > 0) {
-      const currentCombo = getTokenPoolValue(targetDocument, COMBO_FLAG_KEY);
-      await setTokenPoolValue(targetDocument, COMBO_FLAG_KEY, currentCombo + comboPoints);
+    if (targetDocument && (spentCombo > 0 || comboPoints > 0)) {
+      await adjustTokenPoolValue(targetDocument, COMBO_FLAG_KEY, comboPoints - spentCombo);
     }
     const spentComboLine = targetDocument && spentCombo > 0
       ? `<p>${spentCombo} Combo-Punkte von ${targetDocument.name} verbraucht</p>`

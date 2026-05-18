@@ -17,7 +17,7 @@
       "thumbnail": "systems/neoruegen/assets/anvil-impact.png"
     }
   ],
-  "version": "2.0.40",
+  "version": "2.0.42",
   "compatibility": {
     "minimum": 14,
     "verified": "14.360"
@@ -51,7 +51,7 @@
   ],
   "packs": [],
   "packFolders": [],
-  "socket": false,
+  "socket": true,
   "manifest": "https://github.com/Cadarr/NeoRuegenFoundry/releases/download/ErsterVersuch/system.json",
   "download": "https://github.com/Cadarr/NeoRuegenFoundry/releases/download/ErsterVersuch/neoruegen.zip",
   "background": "systems/neoruegen/assets/anvil-impact.png",

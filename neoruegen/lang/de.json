@@ -101,6 +101,8 @@
     "Token": {
       "Combo": "Combo",
       "ComboThreat": "Combo und Bedrohung",
+      "NoActiveGM": "Kein aktiver GM verfügbar, um den Token zu aktualisieren.",
+      "TokenNotFound": "Token konnte nicht gefunden werden.",
       "Threat": "Bedrohung"
     }
   },

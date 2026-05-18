@@ -1,4 +1,5 @@
 const MODULE_ID = 'neoruegen';
+const SOCKET_NAME = `system.${MODULE_ID}`;
 export const COMBO_FLAG_KEY = 'combo';
 const THREAT_FLAG_KEY = 'threat';
 
@@ -9,12 +10,87 @@ export function getTokenPoolValue(document, key) {
 export async function setTokenPoolValue(document, key, value) {
   const parsed = Math.max(Number.parseInt(value, 10) || 0, 0);
 
+  if (!document.canUserModify(game.user, 'update')) {
+    return requestGMTokenPoolChange({
+      type: 'set',
+      tokenUuid: document.uuid,
+      key,
+      value: parsed,
+    });
+  }
+
   if (parsed > 0) {
     await document.setFlag(MODULE_ID, key, parsed);
   }
   else {
     await document.unsetFlag(MODULE_ID, key);
   }
+
+  return parsed;
+}
+
+export async function adjustTokenPoolValue(document, key, delta) {
+  const parsedDelta = Number.parseInt(delta, 10) || 0;
+
+  if (parsedDelta === 0) return getTokenPoolValue(document, key);
+
+  if (!document.canUserModify(game.user, 'update')) {
+    return requestGMTokenPoolChange({
+      type: 'adjust',
+      tokenUuid: document.uuid,
+      key,
+      delta: parsedDelta,
+    });
+  }
+
+  const next = Math.max(getTokenPoolValue(document, key) + parsedDelta, 0);
+  await setTokenPoolValue(document, key, next);
+  return next;
+}
+
+function getPrimaryGM() {
+  return game.users.find((user) => user.active && user.isGM);
+}
+
+async function requestGMTokenPoolChange(data) {
+  const gm = getPrimaryGM();
+
+  if (!gm) {
+    ui.notifications.warn(game.i18n.localize('NEORUEGEN.Token.NoActiveGM'));
+    return null;
+  }
+
+  if (game.user.isGM) return executeTokenPoolChange(data);
+
+  game.socket.emit(SOCKET_NAME, { ...data, gmId: gm.id });
+  return null;
+}
+
+async function executeTokenPoolChange(data) {
+  const tokenDocument = await fromUuid(data.tokenUuid);
+
+  if (!tokenDocument) throw new Error(game.i18n.localize('NEORUEGEN.Token.TokenNotFound'));
+
+  if (data.type === 'adjust') {
+    const next = Math.max(getTokenPoolValue(tokenDocument, data.key) + (Number.parseInt(data.delta, 10) || 0), 0);
+    await setTokenPoolValue(tokenDocument, data.key, next);
+    return next;
+  }
+
+  return setTokenPoolValue(tokenDocument, data.key, data.value);
+}
+
+function registerTokenPoolSocket() {
+  game.socket.on(SOCKET_NAME, async (data) => {
+    if (!game.user.isGM || data.gmId !== game.user.id) return;
+
+    try {
+      await executeTokenPoolChange(data);
+    }
+    catch (error) {
+      ui.notifications.error(error.message);
+    }
+  });
 }
 
 function getHudElement(html) {
@@ -133,6 +209,7 @@ function drawTokenComboThreat(token) {
 }
 
 export function registerTokenComboThreat() {
+  Hooks.once('ready', registerTokenPoolSocket);
   Hooks.on('renderTokenHUD', renderTokenHUD);
   Hooks.on('refreshToken', drawTokenComboThreat);
   Hooks.on('drawToken', drawTokenComboThreat);

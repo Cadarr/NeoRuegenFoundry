@@ -50,7 +50,9 @@
       "Actor": "Neoruegen-Charakterbogen"
     },
     "Token": {
-      "ComboThreat": "Combo/Bedrohung"
+      "Combo": "Combo",
+      "ComboThreat": "Combo/Bedrohung",
+      "Threat": "Bedrohung"
     }
   },
   "TYPES": {

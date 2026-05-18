@@ -13,29 +13,24 @@
 
 .neoruegen-token-combo-threat {
   align-items: center;
+  flex-direction: column;
+  gap: 3px;
   display: flex;
   height: auto;
-  min-height: 36px;
-  width: 112px;
-
-  label {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    width: 100%;
-  }
-
-  span {
-    font-size: 10px;
-    line-height: 1.1;
-    text-align: center;
-  }
+  min-height: 44px;
+  padding: 4px;
+  width: 82px;
 
   input {
     height: 20px;
     text-align: center;
     width: 38px;
+  }
+
+  select {
+    height: 20px;
+    font-size: 11px;
+    width: 74px;
   }
 
   button {

@@ -4,19 +4,11 @@
   "description": "The Neoruegen system for FoundryVTT!",
   "authors": [
     {
-      "name": "Asacolips",
-      "discord": "asacolips"
-    },
-    {
-      "name": "Lee Talman",
-      "discord": ".pizzaWizard"
+      "name": "ThoDie"
     }
   ],
-  "url": "Replace this with a link to your public repository",
   "license": "LICENSE.txt",
   "readme": "README.md",
-  "bugs": "Replace this with a link to file issues or tickets",
-  "changelog": "CHANGELOG.md",
   "media": [
     {
       "type": "setup",
@@ -29,8 +21,12 @@
     "minimum": 11,
     "verified": "11.315"
   },
-  "esmodules": ["module/neoruegen.mjs"],
-  "styles": ["css/neoruegen.css"],
+  "esmodules": [
+    "module/neoruegen.mjs"
+  ],
+  "styles": [
+    "css/neoruegen.css"
+  ],
   "languages": [
     {
       "lang": "en",

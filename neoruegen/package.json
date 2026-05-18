@@ -5,7 +5,8 @@
   "scripts": {
     "build": "sass src/scss/neoruegen.scss css/neoruegen.css --style=expanded --no-source-map",
     "watch": "sass src/scss/neoruegen.scss css/neoruegen.css --style=expanded --source-map --watch",
-    "generate": "node src/generate-neoruegen-system.mjs"
+    "generate": "node src/generate-neoruegen-system.mjs",
+    "package": "cd build && zip -r ../neoruegen.zip ."
   },
   "browserslist": [
     "last 3 versions"

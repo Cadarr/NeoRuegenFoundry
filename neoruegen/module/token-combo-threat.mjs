@@ -1,12 +1,12 @@
 const MODULE_ID = 'neoruegen';
-const COMBO_FLAG_KEY = 'combo';
+export const COMBO_FLAG_KEY = 'combo';
 const THREAT_FLAG_KEY = 'threat';
 
-function getPoolValue(document, key) {
+export function getTokenPoolValue(document, key) {
   return Number(document.getFlag(MODULE_ID, key) ?? 0);
 }
 
-async function setPoolValue(document, key, value) {
+export async function setTokenPoolValue(document, key, value) {
   const parsed = Math.max(Number.parseInt(value, 10) || 0, 0);
 
   if (parsed > 0) {
@@ -27,7 +27,7 @@ function buildPoolControl(tokenDocument, key, label) {
       <span>${label}</span>
       <div class="neoruegen-token-pool-stepper">
         <button type="button" data-action="decrease">-</button>
-        <input type="number" min="0" step="1" value="${getPoolValue(tokenDocument, key)}">
+        <input type="number" min="0" step="1" value="${getTokenPoolValue(tokenDocument, key)}">
         <button type="button" data-action="increase">+</button>
       </div>
     </div>
@@ -55,7 +55,7 @@ function renderTokenHUD(app, html) {
   for (const input of inputs) {
     input.addEventListener('change', async (event) => {
       const pool = event.currentTarget.closest('.neoruegen-token-pool').dataset.pool;
-      await setPoolValue(tokenDocument, pool, event.currentTarget.value);
+      await setTokenPoolValue(tokenDocument, pool, event.currentTarget.value);
       drawTokenComboThreat(token);
     });
     input.addEventListener('click', (event) => event.stopPropagation());
@@ -69,12 +69,12 @@ function renderTokenHUD(app, html) {
       const poolElement = event.currentTarget.closest('.neoruegen-token-pool');
       const pool = poolElement.dataset.pool;
       const input = poolElement.querySelector('input');
-      const current = getPoolValue(tokenDocument, pool);
+      const current = getTokenPoolValue(tokenDocument, pool);
       const next = event.currentTarget.dataset.action === 'increase'
         ? current + 1
         : Math.max(current - 1, 0);
 
-      await setPoolValue(tokenDocument, pool, next);
+      await setTokenPoolValue(tokenDocument, pool, next);
       input.value = next;
       drawTokenComboThreat(token);
     });
@@ -110,8 +110,8 @@ function drawTokenComboThreat(token) {
 
   destroyTokenPoolTexts(token);
 
-  const combo = getPoolValue(token.document, COMBO_FLAG_KEY);
-  const threat = getPoolValue(token.document, THREAT_FLAG_KEY);
+  const combo = getTokenPoolValue(token.document, COMBO_FLAG_KEY);
+  const threat = getTokenPoolValue(token.document, THREAT_FLAG_KEY);
 
   if (combo > 0) {
     const text = createTokenPoolText(combo, '#1b5cff');

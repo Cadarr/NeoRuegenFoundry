@@ -1,3 +1,5 @@
+import { COMBO_FLAG_KEY, getTokenPoolValue, setTokenPoolValue } from '../token-combo-threat.mjs';
+
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
@@ -126,12 +128,22 @@ export class NeoruegenActorSheet extends ActorSheet {
     const comboLine = comboPoints > 0
       ? `${comboPoints} Combo-Punkte generiert`
       : 'Keine Combo-Punkte generiert';
+    const target = game.user.targets.first();
+    const targetDocument = target?.document;
+    if (targetDocument && comboPoints > 0) {
+      const currentCombo = getTokenPoolValue(targetDocument, COMBO_FLAG_KEY);
+      await setTokenPoolValue(targetDocument, COMBO_FLAG_KEY, currentCombo + comboPoints);
+    }
+    const targetLine = targetDocument && comboPoints > 0
+      ? `<p>${comboPoints} Combo-Punkte auf ${targetDocument.name} hinzugefügt</p>`
+      : '';
     const content = `
       <p><strong>${skillLabel}</strong> <span>(${attributeLabel})</span></p>
       <p>${skillValue} + ${attributeValue} = ${diceCount}W12</p>
       <p>${formattedDice.length ? formattedDice.join(', ') : '-'}</p>
       <p>${resultLine}</p>
       ${isSuccess ? `<p>${comboLine}</p>` : ''}
+      ${targetLine}
     `;
 
     await roll.toMessage({

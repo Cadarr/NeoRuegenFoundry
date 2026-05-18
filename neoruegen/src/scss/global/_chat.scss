@@ -1,0 +1,24 @@
+.neoruegen-roll-breakdown {
+  background: rgba(0, 0, 0, 0.045);
+  border-left: 2px solid rgba(0, 0, 0, 0.18);
+  color: rgba(0, 0, 0, 0.72);
+  display: grid;
+  font-size: 12px;
+  line-height: 1.25;
+  margin: 6px 0;
+  padding: 4px 7px;
+
+  div {
+    align-items: baseline;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+  }
+
+  dt {
+    margin: 0;
+  }
+
+  dd {
+    margin: 0;
+  }
+}

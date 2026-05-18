@@ -8,6 +8,42 @@
       "Verstand": "Verstand",
       "Schneid": "Schneid"
     },
+    "Complexity": {
+      "Simple": "Einfach",
+      "Low": "Normal",
+      "Medium": "Anspruchsvoll",
+      "High": "Komplex",
+      "Extreme": "Extrem"
+    },
+    "Dialog": {
+      "Attribute": "Attribut",
+      "Complexity": "Komplexität",
+      "Difficulty": "Schwierigkeit",
+      "NoManeuver": "Kein Manöver",
+      "NoManeuvers": "Keine Manöver für diese Fertigkeit.",
+      "NotEnoughCombo": "Nicht genug Combo auf dem Ziel.",
+      "Skill": "Fertigkeit",
+      "SkillCheck": "Fertigkeitsprobe",
+      "SkillTooLow": "Fertigkeitswert zu niedrig.",
+      "SkillValue": "Fertigkeitswert"
+    },
+    "Difficulty": {
+      "VeryEasy": "Sehr leicht",
+      "Easy": "Leicht",
+      "Normal": "Normal",
+      "Hard": "Schwierig",
+      "VeryHard": "Sehr schwierig"
+    },
+    "Maneuver": {
+      "AimedShot": {
+        "Name": "Gezielter Schuss",
+        "Description": "Trifft der Schuss, verursacht er 3 Schaden mehr."
+      },
+      "Feint": {
+        "Name": "Finte",
+        "Description": "Statt Schaden, erhält das Ziel bei einem Treffer 2 zusätzliche Combo"
+      }
+    },
     "Skill": {
       "Athletik": "Athletik",
       "Heimlichkeit": "Heimlichkeit",

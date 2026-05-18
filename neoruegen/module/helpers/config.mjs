@@ -75,3 +75,30 @@ NEORUEGEN.skills = {
   verkleidung: { label: 'NEORUEGEN.Skill.Verkleidung', attribute: 'schneid' },
   wissen: { label: 'NEORUEGEN.Skill.Wissen', attribute: 'verstand' },
 };
+
+NEORUEGEN.difficulties = {
+  veryEasy: { label: 'NEORUEGEN.Difficulty.VeryEasy', modifier: 4 },
+  easy: { label: 'NEORUEGEN.Difficulty.Easy', modifier: 2 },
+  normal: { label: 'NEORUEGEN.Difficulty.Normal', modifier: 0 },
+  hard: { label: 'NEORUEGEN.Difficulty.Hard', modifier: -2 },
+  veryHard: { label: 'NEORUEGEN.Difficulty.VeryHard', modifier: -4 },
+};
+
+NEORUEGEN.maneuvers = {
+  aimedShot: {
+    label: 'NEORUEGEN.Maneuver.AimedShot.Name',
+    skill: 'schusswaffen',
+    skillValue: 2,
+    complexity: 1,
+    combo: 2,
+    description: 'NEORUEGEN.Maneuver.AimedShot.Description',
+  },
+  feint: {
+    label: 'NEORUEGEN.Maneuver.Feint.Name',
+    skill: 'nahkampf',
+    skillValue: 2,
+    complexity: 0,
+    combo: 1,
+    description: 'NEORUEGEN.Maneuver.Feint.Description',
+  },
+};

@@ -79,7 +79,7 @@
         <article class="maneuver-entry">
           <label class="maneuver-learn">
             <input type="checkbox" name="system.maneuvers.{{maneuver.key}}.learned" {{checked maneuver.learned}}
-              data-dtype="Boolean" />
+              data-dtype="Boolean" {{#unless maneuver.canLearn}}disabled{{/unless}} />
             <span>{{localize "NEORUEGEN.Action.Learned"}}</span>
           </label>
           <div class="maneuver-content">
@@ -91,7 +91,7 @@
               </div>
               <div>
                 <dt>{{localize "NEORUEGEN.Dialog.Attribute"}}</dt>
-                <dd>{{maneuver.attribute}}</dd>
+                <dd>{{maneuver.attribute}} {{maneuver.attributeValue}}</dd>
               </div>
               <div>
                 <dt>{{localize "NEORUEGEN.Dialog.Complexity"}}</dt>
@@ -102,6 +102,9 @@
                 <dd>{{maneuver.combo}}</dd>
               </div>
             </dl>
+            {{#if maneuver.attributeTooLow}}
+            <p class="maneuver-warning">{{localize "NEORUEGEN.Dialog.AttributeTooLow"}}</p>
+            {{/if}}
             <p>{{maneuver.description}}</p>
           </div>
         </article>

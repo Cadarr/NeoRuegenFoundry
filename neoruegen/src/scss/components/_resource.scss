@@ -89,6 +89,10 @@
   input {
     margin: 0;
   }
+
+  input:disabled + span {
+    opacity: 0.48;
+  }
 }
 
 .maneuver-content {
@@ -119,6 +123,13 @@
 
   dt {
     font-weight: 700;
+  }
+
+  .maneuver-warning {
+    color: #7d1717;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 3px;
   }
 }
 

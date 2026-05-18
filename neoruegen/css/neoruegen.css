@@ -389,6 +389,9 @@
 .neoruegen .maneuver-learn input {
   margin: 0;
 }
+.neoruegen .maneuver-learn input:disabled + span {
+  opacity: 0.48;
+}
 .neoruegen .maneuver-content h3 {
   border: 0;
   margin: 0 0 4px;
@@ -412,6 +415,12 @@
 }
 .neoruegen .maneuver-content dt {
   font-weight: 700;
+}
+.neoruegen .maneuver-content .maneuver-warning {
+  color: #7d1717;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 3px;
 }
 .neoruegen .neoruegen-roll-dialog .form-group {
   align-items: center;

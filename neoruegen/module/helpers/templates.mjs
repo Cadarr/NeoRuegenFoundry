@@ -4,13 +4,5 @@
  * @return {Promise}
  */
 export const preloadHandlebarsTemplates = async function () {
-  return loadTemplates([
-    // Actor partials.
-    'systems/neoruegen/templates/actor/parts/actor-features.hbs',
-    'systems/neoruegen/templates/actor/parts/actor-items.hbs',
-    'systems/neoruegen/templates/actor/parts/actor-spells.hbs',
-    'systems/neoruegen/templates/actor/parts/actor-effects.hbs',
-    // Item partials
-    'systems/neoruegen/templates/item/parts/item-effects.hbs',
-  ]);
+  return Promise.resolve([]);
 };

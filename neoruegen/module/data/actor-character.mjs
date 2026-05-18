@@ -3,20 +3,20 @@ import NeoruegenActorBase from "./base-actor.mjs";
 export default class NeoruegenCharacter extends NeoruegenActorBase {
 
   static defineSchema() {
-    const fields = foundry.data.fields;
+    const { NumberField, SchemaField } = foundry.data.fields;
     const requiredInteger = { required: true, nullable: false, integer: true };
     const schema = super.defineSchema();
 
-    schema.attributes = new fields.SchemaField({
-      level: new fields.SchemaField({
-        value: new fields.NumberField({ ...requiredInteger, initial: 1 })
-      }),
-    });
+    schema.attributes = new SchemaField(Object.keys(CONFIG.NEORUEGEN.attributes).reduce((obj, attribute) => {
+      obj[attribute] = new SchemaField({
+        value: new NumberField({ ...requiredInteger, initial: 1, min: 1, max: 6 }),
+      });
+      return obj;
+    }, {}));
 
-    // Iterate over ability names and create a new SchemaField for each.
-    schema.abilities = new fields.SchemaField(Object.keys(CONFIG.NEORUEGEN.abilities).reduce((obj, ability) => {
-      obj[ability] = new fields.SchemaField({
-        value: new fields.NumberField({ ...requiredInteger, initial: 10, min: 0 }),
+    schema.skills = new SchemaField(Object.keys(CONFIG.NEORUEGEN.skills).reduce((obj, skill) => {
+      obj[skill] = new SchemaField({
+        value: new NumberField({ ...requiredInteger, initial: 0, min: 0, max: 4 }),
       });
       return obj;
     }, {}));
@@ -27,28 +27,18 @@ export default class NeoruegenCharacter extends NeoruegenActorBase {
   prepareDerivedData() {
     super.prepareDerivedData();
 
-    // Loop through ability scores, and add their modifiers to our sheet output.
-    for (const key in this.abilities) {
-      // Calculate the modifier using d20 rules.
-      this.abilities[key].mod = Math.floor((this.abilities[key].value - 10) / 2);
-      // Handle ability label localization.
-      this.abilities[key].label = game.i18n.localize(CONFIG.NEORUEGEN.abilities[key]) ?? key;
+    for (const [key, attribute] of Object.entries(this.attributes)) {
+      attribute.label = game.i18n.localize(CONFIG.NEORUEGEN.attributes[key]) ?? key;
+    }
+    for (const [key, skill] of Object.entries(this.skills)) {
+      skill.label = game.i18n.localize(CONFIG.NEORUEGEN.skills[key]) ?? key;
     }
   }
 
   getRollData() {
-    const data = {};
-
-    // Copy the ability scores to the top level, so that rolls can use
-    // formulas like `@str.mod + 4`.
-    if (this.abilities) {
-      for (let [k,v] of Object.entries(this.abilities)) {
-        data[k] = foundry.utils.deepClone(v);
-      }
-    }
-
-    data.lvl = this.attributes.level.value;
-
-    return data
+    return {
+      attributes: foundry.utils.deepClone(this.attributes),
+      skills: foundry.utils.deepClone(this.skills),
+    };
   }
 }

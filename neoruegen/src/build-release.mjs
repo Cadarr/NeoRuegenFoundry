@@ -23,28 +23,27 @@ const releaseZip = path.join(releaseRoot, `${packageId}.zip`);
 const releaseManifest = path.join(releaseRoot, 'system.json');
 const rootZip = path.join(systemRoot, `${packageId}.zip`);
 
-const excluded = new Set([
-  '.DS_Store',
-  'build',
-  'node_modules',
-  'src',
-  `${packageId}.zip`,
-  'template.json',
-]);
+const included = [
+  'assets',
+  'css',
+  'lang',
+  'module',
+  'templates',
+  'CHANGELOG.md',
+  'LICENSE.txt',
+  'README.md',
+  'system.json',
+];
 
 function copyCurrentSystem() {
   fs.rmSync(buildSystemRoot, { recursive: true, force: true });
   fs.mkdirSync(buildSystemRoot, { recursive: true });
 
-  for (const entry of fs.readdirSync(systemRoot, { withFileTypes: true })) {
-    if (excluded.has(entry.name)) continue;
+  for (const entry of included) {
+    const source = path.join(systemRoot, entry);
+    if (!fs.existsSync(source)) continue;
 
-    const source = path.join(systemRoot, entry.name);
-    const destination = path.join(buildSystemRoot, entry.name);
-    fs.cpSync(source, destination, {
-      recursive: true,
-      filter: (src) => !src.split(path.sep).includes('node_modules'),
-    });
+    fs.cpSync(source, path.join(buildSystemRoot, entry), { recursive: true });
   }
 }
 

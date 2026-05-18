@@ -1,23 +1,42 @@
 export const NEORUEGEN = {};
 
-/**
- * The set of Ability Scores used within the system.
- * @type {Object}
- */
-NEORUEGEN.abilities = {
-  str: 'NEORUEGEN.Ability.Str.long',
-  dex: 'NEORUEGEN.Ability.Dex.long',
-  con: 'NEORUEGEN.Ability.Con.long',
-  int: 'NEORUEGEN.Ability.Int.long',
-  wis: 'NEORUEGEN.Ability.Wis.long',
-  cha: 'NEORUEGEN.Ability.Cha.long',
+NEORUEGEN.attributes = {
+  koerper: 'NEORUEGEN.Attribute.Koerper',
+  verstand: 'NEORUEGEN.Attribute.Verstand',
+  schneid: 'NEORUEGEN.Attribute.Schneid',
 };
 
-NEORUEGEN.abilityAbbreviations = {
-  str: 'NEORUEGEN.Ability.Str.abbr',
-  dex: 'NEORUEGEN.Ability.Dex.abbr',
-  con: 'NEORUEGEN.Ability.Con.abbr',
-  int: 'NEORUEGEN.Ability.Int.abbr',
-  wis: 'NEORUEGEN.Ability.Wis.abbr',
-  cha: 'NEORUEGEN.Ability.Cha.abbr',
+NEORUEGEN.skills = {
+  athletik: 'NEORUEGEN.Skill.Athletik',
+  heimlichkeit: 'NEORUEGEN.Skill.Heimlichkeit',
+  wahrnehmung: 'NEORUEGEN.Skill.Wahrnehmung',
+  ueberzeugen: 'NEORUEGEN.Skill.Ueberzeugen',
+  wissen: 'NEORUEGEN.Skill.Wissen',
+  technik: 'NEORUEGEN.Skill.Technik',
+  ueberleben: 'NEORUEGEN.Skill.Ueberleben',
+  fahren: 'NEORUEGEN.Skill.Fahren',
+  nahkampf: 'NEORUEGEN.Skill.Nahkampf',
+  schusswaffen: 'NEORUEGEN.Skill.Schusswaffen',
+  taktik: 'NEORUEGEN.Skill.Taktik',
+  schwereWaffen: 'NEORUEGEN.Skill.SchwereWaffen',
+  panzerung: 'NEORUEGEN.Skill.Panzerung',
+  einschuechtern: 'NEORUEGEN.Skill.Einschuechtern',
+  hacking: 'NEORUEGEN.Skill.Hacking',
+  netzwerke: 'NEORUEGEN.Skill.Netzwerke',
+  elektronik: 'NEORUEGEN.Skill.Elektronik',
+  drohnensteuerung: 'NEORUEGEN.Skill.Drohnensteuerung',
+  sensorik: 'NEORUEGEN.Skill.Sensorik',
+  biotech: 'NEORUEGEN.Skill.Biotech',
+  chemie: 'NEORUEGEN.Skill.Chemie',
+  verhandeln: 'NEORUEGEN.Skill.Verhandeln',
+  taeuschen: 'NEORUEGEN.Skill.Taeuschen',
+  stil: 'NEORUEGEN.Skill.Stil',
+  sicherheitssysteme: 'NEORUEGEN.Skill.Sicherheitssysteme',
+  verkleidung: 'NEORUEGEN.Skill.Verkleidung',
+  konstruktion: 'NEORUEGEN.Skill.Konstruktion',
+  programmierung: 'NEORUEGEN.Skill.Programmierung',
+  navigation: 'NEORUEGEN.Skill.Navigation',
+  schmuggel: 'NEORUEGEN.Skill.Schmuggel',
+  handel: 'NEORUEGEN.Skill.Handel',
+  buerokratie: 'NEORUEGEN.Skill.Buerokratie',
 };

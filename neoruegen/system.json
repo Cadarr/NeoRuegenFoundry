@@ -2,7 +2,7 @@
   "id": "neoruegen",
   "type": "system",
   "title": "Neoruegen",
-  "description": "The Neoruegen system for FoundryVTT!",
+  "description": "Das Neoruegen-System fuer Foundry VTT.",
   "authors": [
     {
       "name": "ThoDie"
@@ -17,7 +17,7 @@
       "thumbnail": "systems/neoruegen/assets/anvil-impact.png"
     }
   ],
-  "version": "2.0.2",
+  "version": "2.0.3",
   "compatibility": {
     "minimum": 14,
     "verified": "14.360"
@@ -27,28 +27,6 @@
       "character": {
         "htmlFields": [
           "biography"
-        ]
-      },
-      "npc": {
-        "htmlFields": [
-          "biography"
-        ]
-      }
-    },
-    "Item": {
-      "item": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "feature": {
-        "htmlFields": [
-          "description"
-        ]
-      },
-      "spell": {
-        "htmlFields": [
-          "description"
         ]
       }
     }
@@ -61,6 +39,11 @@
   ],
   "languages": [
     {
+      "lang": "de",
+      "name": "Deutsch",
+      "path": "lang/de.json"
+    },
+    {
       "lang": "en",
       "name": "English",
       "path": "lang/en.json"
@@ -72,11 +55,8 @@
   "manifest": "https://github.com/Cadarr/NeoRuegenFoundry/releases/download/ErsterVersuch/system.json",
   "download": "https://github.com/Cadarr/NeoRuegenFoundry/releases/download/ErsterVersuch/neoruegen.zip",
   "background": "systems/neoruegen/assets/anvil-impact.png",
-  "initiative": "1d20 + @abilities.dex.mod",
   "grid": {
     "distance": 5,
     "units": "ft"
-  },
-  "primaryTokenAttribute": "health",
-  "secondaryTokenAttribute": "power"
+  }
 }

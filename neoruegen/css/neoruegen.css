@@ -204,7 +204,7 @@
 }
 
 /* Styles limited to neoruegen sheets */
-.neoruegen .item-form {
+.neoruegen .sheet-form {
   font-family: "Roboto", sans-serif;
 }
 .neoruegen .sheet-header {
@@ -251,116 +251,4 @@
 }
 .neoruegen .resource-label {
   font-weight: bold;
-}
-.neoruegen .items-header {
-  height: 28px;
-  margin: 2px 0;
-  padding: 0;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.05);
-  border: 2px groove #eeede0;
-  font-weight: bold;
-}
-.neoruegen .items-header > * {
-  font-size: 14px;
-  text-align: center;
-}
-.neoruegen .items-header .item-name {
-  font-weight: bold;
-  padding-left: 5px;
-  text-align: left;
-  display: flex;
-}
-.neoruegen .items-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  color: #444;
-}
-.neoruegen .items-list .item-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.neoruegen .items-list .item-name {
-  flex: 2;
-  margin: 0;
-  overflow: hidden;
-  font-size: 13px;
-  text-align: left;
-  align-items: center;
-  display: flex;
-}
-.neoruegen .items-list .item-name h3, .neoruegen .items-list .item-name h4 {
-  margin: 0;
-  white-space: nowrap;
-  overflow-x: hidden;
-}
-.neoruegen .items-list .item-controls {
-  display: flex;
-  flex: 0 0 100px;
-  justify-content: flex-end;
-}
-.neoruegen .items-list .item-controls a {
-  font-size: 12px;
-  text-align: center;
-  margin: 0 6px;
-}
-.neoruegen .items-list .item {
-  align-items: center;
-  padding: 0 2px;
-  border-bottom: 1px solid #c9c7b8;
-}
-.neoruegen .items-list .item:last-child {
-  border-bottom: none;
-}
-.neoruegen .items-list .item .item-name {
-  color: #191813;
-}
-.neoruegen .items-list .item .item-name .item-image {
-  flex: 0 0 30px;
-  height: 30px;
-  background-size: 30px;
-  border: none;
-  margin-right: 5px;
-}
-.neoruegen .items-list .item-prop {
-  text-align: center;
-  border-left: 1px solid #c9c7b8;
-  border-right: 1px solid #c9c7b8;
-  font-size: 12px;
-}
-.neoruegen .items-list .items-header {
-  height: 28px;
-  margin: 2px 0;
-  padding: 0;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.05);
-  border: 2px groove #eeede0;
-  font-weight: bold;
-}
-.neoruegen .items-list .items-header > * {
-  font-size: 12px;
-  text-align: center;
-}
-.neoruegen .items-list .items-header .item-name {
-  padding-left: 5px;
-  text-align: left;
-}
-.neoruegen .item-formula {
-  flex: 0 0 200px;
-  padding: 0 8px;
-}
-.neoruegen .effects .item .effect-source,
-.neoruegen .effects .item .effect-duration,
-.neoruegen .effects .item .effect-controls {
-  text-align: center;
-  border-left: 1px solid #c9c7b8;
-  border-right: 1px solid #c9c7b8;
-  font-size: 12px;
-}
-.neoruegen .effects .item .effect-controls {
-  border: none;
 }

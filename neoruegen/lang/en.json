@@ -40,6 +40,11 @@
       "Hard": "Schwierig",
       "VeryHard": "Sehr schwierig"
     },
+    "GMMenu": {
+      "RequestCheck": "Probe fordern",
+      "RequestCheckPlaceholder": "Hier wird später die Probe konfiguriert.",
+      "Title": "NeoRügen"
+    },
     "Maneuver": {
       "AimedShot": {
         "Name": "Gezielter Schuss",

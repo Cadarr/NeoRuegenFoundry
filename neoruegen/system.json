@@ -69,8 +69,8 @@
   "packs": [],
   "packFolders": [],
   "socket": false,
-  "manifest": "https://github.com/Cadarr/NeoRuegenFoundry/releases/latest/download/system.json",
-  "download": "https://github.com/Cadarr/NeoRuegenFoundry/releases/latest/download/neoruegen.zip",
+  "manifest": "https://github.com/Cadarr/NeoRuegenFoundry/releases/download/ErsterVersuch/system.json",
+  "download": "https://github.com/Cadarr/NeoRuegenFoundry/releases/download/ErsterVersuch/neoruegen.zip",
   "background": "systems/neoruegen/assets/anvil-impact.png",
   "initiative": "1d20 + @abilities.dex.mod",
   "grid": {

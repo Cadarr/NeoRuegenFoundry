@@ -26,16 +26,7 @@ Hooks.once('init', function () {
   // Add custom constants for configuration.
   CONFIG.NEORUEGEN = NEORUEGEN;
 
-  /**
-   * Set an initiative formula for the system
-   * @type {String}
-   */
-  CONFIG.Combat.initiative = {
-    formula: '1d20 + @abilities.dex.mod',
-    decimals: 2,
-  };
-
-  // Define custom Document and DataModel classes
+  // Define custom Document and DataModel classes.
   CONFIG.Actor.documentClass = NeoruegenActor;
 
   // Note that you don't need to declare a DataModel
@@ -43,14 +34,24 @@ Hooks.once('init', function () {
   // with the Character/NPC as part of super.defineSchema()
   CONFIG.Actor.dataModels = {
     character: models.NeoruegenCharacter,
-    npc: models.NeoruegenNPC
-  }
+    npc: models.NeoruegenNPC,
+  };
   CONFIG.Item.documentClass = NeoruegenItem;
   CONFIG.Item.dataModels = {
     item: models.NeoruegenItem,
     feature: models.NeoruegenFeature,
-    spell: models.NeoruegenSpell
-  }
+    spell: models.NeoruegenSpell,
+  };
+  CONFIG.Actor.trackableAttributes = {
+    character: {
+      bar: ['health', 'power'],
+      value: ['attributes.level.value'],
+    },
+    npc: {
+      bar: ['health', 'power'],
+      value: ['cr', 'xp'],
+    },
+  };
 
   // Active Effects are never copied to the Actor,
   // but will still apply to the Actor from within the Item

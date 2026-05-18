@@ -43,7 +43,7 @@ export class NeoruegenItemSheet extends ItemSheet {
     const context = super.getData();
 
     // Use a safe clone of the item data for further operations.
-    const itemData = this.document.toObject(false);
+    const itemData = this.document.toPlainObject();
 
     // Enrich description info for display
     // Enrichment turns text like `[[/r 1d20]]` into buttons
@@ -52,8 +52,6 @@ export class NeoruegenItemSheet extends ItemSheet {
       {
         // Whether to show secret blocks in the finished html
         secrets: this.document.isOwner,
-        // Necessary in v11, can be removed in v12
-        async: true,
         // Data to fill in for inline rolls
         rollData: this.item.getRollData(),
         // Relative UUID resolution

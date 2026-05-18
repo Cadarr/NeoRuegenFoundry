@@ -25,6 +25,7 @@ export class NeoruegenItem extends Item {
 
     // If present, add the actor's roll data
     rollData.actor = this.actor.getRollData();
+    Object.assign(rollData, rollData.actor);
 
     return rollData;
   }
@@ -39,7 +40,7 @@ export class NeoruegenItem extends Item {
    * @returns {object} Plain object either via deepClone or the spread operator.
    */
   toPlainObject() {
-    const result = { ...this };
+    const result = this.toObject(false);
 
     // Simplify system data.
     result.system = this.system.toPlainObject();
@@ -78,7 +79,7 @@ export class NeoruegenItem extends Item {
       const rollData = this.getRollData();
 
       // Invoke the roll and submit it to chat.
-      const roll = new Roll(rollData.formula, rollData.actor);
+      const roll = new Roll(rollData.formula, rollData);
       // If you need to store the value first, uncomment the next line.
       // const result = await roll.evaluate();
       roll.toMessage({

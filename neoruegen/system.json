@@ -1,5 +1,6 @@
 {
   "id": "neoruegen",
+  "type": "system",
   "title": "Neoruegen",
   "description": "The Neoruegen system for FoundryVTT!",
   "authors": [
@@ -16,10 +17,41 @@
       "thumbnail": "systems/neoruegen/assets/anvil-impact.png"
     }
   ],
-  "version": "2.0.0",
+  "version": "2.0.1",
   "compatibility": {
-    "minimum": 11,
-    "verified": "11.315"
+    "minimum": 14,
+    "verified": "14.360"
+  },
+  "documentTypes": {
+    "Actor": {
+      "character": {
+        "htmlFields": [
+          "biography"
+        ]
+      },
+      "npc": {
+        "htmlFields": [
+          "biography"
+        ]
+      }
+    },
+    "Item": {
+      "item": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "feature": {
+        "htmlFields": [
+          "description"
+        ]
+      },
+      "spell": {
+        "htmlFields": [
+          "description"
+        ]
+      }
+    }
   },
   "esmodules": [
     "module/neoruegen.mjs"
@@ -40,8 +72,11 @@
   "manifest": "https://github.com/Cadarr/NeoRuegenFoundry/releases/latest/download/system.json",
   "download": "https://github.com/Cadarr/NeoRuegenFoundry/releases/latest/download/neoruegen.zip",
   "background": "systems/neoruegen/assets/anvil-impact.png",
-  "gridDistance": 5,
-  "gridUnits": "ft",
+  "initiative": "1d20 + @abilities.dex.mod",
+  "grid": {
+    "distance": 5,
+    "units": "ft"
+  },
   "primaryTokenAttribute": "health",
   "secondaryTokenAttribute": "power"
 }

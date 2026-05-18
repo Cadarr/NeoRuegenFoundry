@@ -128,7 +128,10 @@ export class NeoruegenActorSheet extends ActorSheet {
    */
   async _onSkillRoll(event) {
     event.preventDefault();
-    const skillKey = event.currentTarget.dataset.skill;
+    return this.rollSkill(event.currentTarget.dataset.skill);
+  }
+
+  async rollSkill(skillKey, options = {}) {
     const skillConfig = CONFIG.NEORUEGEN.skills[skillKey];
 
     if (!skillConfig) return;
@@ -139,8 +142,8 @@ export class NeoruegenActorSheet extends ActorSheet {
     const skillLabel = game.i18n.localize(skillConfig.label);
     const attributeLabel = game.i18n.localize(CONFIG.NEORUEGEN.attributes[attributeKey]);
     const target = game.user.targets.first();
-    const targetDocument = target?.document;
-    const rollOptions = await this._promptSkillRollOptions(skillKey, skillValue, targetDocument);
+    const targetDocument = options.targetDocument ?? target?.document;
+    const rollOptions = await this._promptSkillRollOptions(skillKey, skillValue, targetDocument, options);
 
     if (!rollOptions) return null;
 
@@ -231,14 +234,14 @@ export class NeoruegenActorSheet extends ActorSheet {
     return game.i18n.localize(labels[index]);
   }
 
-  async _promptSkillRollOptions(skillKey, skillValue, targetDocument) {
+  async _promptSkillRollOptions(skillKey, skillValue, targetDocument, options = {}) {
     const maneuvers = Object.entries(CONFIG.NEORUEGEN.maneuvers)
       .filter(([key, maneuver]) => maneuver.skill === skillKey && this.actor.system.maneuvers[key]?.learned)
       .map(([key, maneuver]) => ({ key, ...maneuver }));
     const targetCombo = targetDocument ? getTokenPoolValue(targetDocument, COMBO_FLAG_KEY) : 0;
     const comboSpendMax = targetDocument ? targetCombo : 5;
     const difficultyOptions = Object.entries(CONFIG.NEORUEGEN.difficulties).map(([key, difficulty]) => {
-      const selected = key === 'normal' ? ' selected' : '';
+      const selected = key === (options.difficultyKey ?? 'normal') ? ' selected' : '';
       const modifier = difficulty.modifier >= 0 ? `+${difficulty.modifier}` : String(difficulty.modifier);
       return `<option value="${key}"${selected}>${game.i18n.localize(difficulty.label)} (${modifier})</option>`;
     }).join('');

@@ -39,9 +39,14 @@
       "VeryHard": "Sehr schwierig"
     },
     "GMMenu": {
-      "ComboAvailable": "Combopunkte stehen zur Verfügung",
+      "NoActorForRequestedCheck": "Kein Token ausgewählt und kein Spielercharakter zugewiesen.",
+      "NoActorPermission": "Du hast keine ausreichenden Rechte für diesen Charakter.",
       "RequestCheck": "Probe fordern",
+      "RequestedCheckFailed": "Die geforderte Probe konnte nicht geöffnet werden.",
       "RollRequestedCheck": "Ablegen",
+      "SetTarget": "Ziel übernehmen",
+      "Target": "Ziel",
+      "TargetNotFound": "Das Ziel der geforderten Probe konnte nicht gefunden werden.",
       "Title": "NeoRügen"
     },
     "Maneuver": {

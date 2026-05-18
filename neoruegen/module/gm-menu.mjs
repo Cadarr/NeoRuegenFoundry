@@ -1,6 +1,11 @@
+import { NeoruegenActorSheet } from './sheets/actor-sheet.mjs';
+
 const CONTROL_NAME = 'neoruegen';
 const REQUEST_CHECK_TOOL = 'requestCheck';
-const MAX_REQUEST_COMBO = 9;
+
+function getHtmlElement(html) {
+  return html instanceof HTMLElement ? html : html[0];
+}
 
 function buildDifficultyOptions() {
   return Object.entries(CONFIG.NEORUEGEN.difficulties).map(([key, difficulty]) => {
@@ -20,7 +25,7 @@ function buildSkillButtons() {
   }).join('');
 }
 
-async function postRequestedCheck(skillKey, difficultyKey, combo) {
+async function postRequestedCheck(skillKey, difficultyKey) {
   const skill = CONFIG.NEORUEGEN.skills[skillKey];
   const difficulty = CONFIG.NEORUEGEN.difficulties[difficultyKey];
 
@@ -28,14 +33,20 @@ async function postRequestedCheck(skillKey, difficultyKey, combo) {
 
   const skillLabel = game.i18n.localize(skill.label);
   const difficultyLabel = game.i18n.localize(difficulty.label);
-  const comboLine = combo > 0
-    ? `<p>${combo} ${game.i18n.localize('NEORUEGEN.GMMenu.ComboAvailable')}</p>`
+  const target = game.user.targets.first();
+  const targetUuid = target?.document.uuid ?? '';
+  const targetLine = target
+    ? `<p>${game.i18n.localize('NEORUEGEN.GMMenu.Target')}: ${target.document.name}</p>`
     : '';
   const content = `
     <div class="neoruegen-requested-check">
       <p><strong>${difficultyLabel} ${game.i18n.localize('NEORUEGEN.Action.Check')} auf ${skillLabel}</strong></p>
-      ${comboLine}
-      <button type="button" data-action="neoruegen-roll-request" data-skill="${skillKey}" data-difficulty="${difficultyKey}" data-combo="${combo}">
+      ${targetLine}
+      ${targetUuid ? `
+      <button type="button" data-action="neoruegen-set-request-target" data-target-uuid="${targetUuid}">
+        ${game.i18n.localize('NEORUEGEN.GMMenu.SetTarget')}
+      </button>` : ''}
+      <button type="button" data-action="neoruegen-roll-request" data-skill="${skillKey}" data-difficulty="${difficultyKey}">
         ${game.i18n.localize('NEORUEGEN.GMMenu.RollRequestedCheck')}
       </button>
     </div>
@@ -47,41 +58,107 @@ async function postRequestedCheck(skillKey, difficultyKey, combo) {
   });
 }
 
-function activateRequestCheckDialog(html) {
-  const element = html instanceof HTMLElement ? html : html[0];
-  const form = element.querySelector('.neoruegen-request-check-dialog');
-  const comboInput = form.querySelector('[name="combo"]');
-  const comboValue = form.querySelector('.combo-stepper-value');
-  const comboButtons = form.querySelectorAll('.combo-stepper button');
-  const skillButtons = form.querySelectorAll('.skill-request-buttons button');
+function getRequestedCheckActor() {
+  const token = canvas.tokens.controlled[0];
+  const actor = token?.actor ?? (!game.user.isGM ? game.user.character : null);
 
-  const updateCombo = () => {
-    const combo = Math.clamp(Number(comboInput.value) || 0, 0, MAX_REQUEST_COMBO);
-    comboInput.value = combo;
-    comboValue.textContent = String(combo);
-  };
+  if (!actor) {
+    ui.notifications.warn(game.i18n.localize('NEORUEGEN.GMMenu.NoActorForRequestedCheck'));
+    return null;
+  }
 
-  for (const button of comboButtons) {
-    button.addEventListener('click', (event) => {
-      event.preventDefault();
-      const current = Number(comboInput.value) || 0;
-      comboInput.value = event.currentTarget.dataset.action === 'increase'
-        ? Math.min(current + 1, MAX_REQUEST_COMBO)
-        : Math.max(current - 1, 0);
-      updateCombo();
+  if (!actor.testUserPermission(game.user, 'OWNER')) {
+    ui.notifications.warn(game.i18n.localize('NEORUEGEN.GMMenu.NoActorPermission'));
+    return null;
+  }
+
+  return actor;
+}
+
+async function setRequestedTarget(targetUuid) {
+  if (!targetUuid) return null;
+
+  const tokenDocument = await fromUuid(targetUuid);
+  const token = tokenDocument?.object ?? canvas.tokens.get(tokenDocument?.id);
+
+  if (!token) {
+    ui.notifications.warn(game.i18n.localize('NEORUEGEN.GMMenu.TargetNotFound'));
+    return false;
+  }
+
+  token.setTarget(true, { user: game.user, releaseOthers: true, groupSelection: true });
+  game.user.updateTokenTargets([token.id]);
+  return token;
+}
+
+async function waitForRequestedTarget(token) {
+  for (let attempt = 0; attempt < 10; attempt += 1) {
+    if (game.user.targets.has(token)) return true;
+    await new Promise((resolve) => setTimeout(resolve, 25));
+  }
+
+  return game.user.targets.has(token);
+}
+
+async function onRequestedCheckButton(event) {
+  event.preventDefault();
+
+  const button = event.currentTarget;
+  const actor = getRequestedCheckActor();
+
+  if (!actor) return;
+
+  const sheet = actor.sheet instanceof NeoruegenActorSheet
+    ? actor.sheet
+    : new NeoruegenActorSheet(actor);
+
+  try {
+    await sheet.rollSkill(button.dataset.skill, {
+      difficultyKey: button.dataset.difficulty,
     });
   }
+  catch (error) {
+    console.error(error);
+    ui.notifications.error(game.i18n.localize('NEORUEGEN.GMMenu.RequestedCheckFailed'));
+  }
+}
+
+async function onSetRequestTargetButton(event) {
+  event.preventDefault();
+
+  const target = await setRequestedTarget(event.currentTarget.dataset.targetUuid);
+
+  if (!target) return;
+  if (!await waitForRequestedTarget(target)) {
+    ui.notifications.warn(game.i18n.localize('NEORUEGEN.GMMenu.TargetNotFound'));
+  }
+}
+
+function activateRequestedCheckMessage(_message, html) {
+  const element = getHtmlElement(html);
+  const rollButtons = element.querySelectorAll('[data-action="neoruegen-roll-request"]');
+  const targetButtons = element.querySelectorAll('[data-action="neoruegen-set-request-target"]');
+
+  for (const button of rollButtons) {
+    button.addEventListener('click', onRequestedCheckButton);
+  }
+  for (const button of targetButtons) {
+    button.addEventListener('click', onSetRequestTargetButton);
+  }
+}
+
+function activateRequestCheckDialog(html) {
+  const element = getHtmlElement(html);
+  const form = element.querySelector('.neoruegen-request-check-dialog');
+  const skillButtons = form.querySelectorAll('.skill-request-buttons button');
 
   for (const button of skillButtons) {
     button.addEventListener('click', async (event) => {
       event.preventDefault();
       const difficultyKey = form.querySelector('[name="difficulty"]').value;
-      const combo = Math.clamp(Number(comboInput.value) || 0, 0, MAX_REQUEST_COMBO);
-      await postRequestedCheck(event.currentTarget.dataset.skill, difficultyKey, combo);
+      await postRequestedCheck(event.currentTarget.dataset.skill, difficultyKey);
     });
   }
-
-  updateCombo();
 }
 
 function openRequestCheckDialog(_event, active) {
@@ -93,15 +170,6 @@ function openRequestCheckDialog(_event, active) {
         <div class="form-group">
           <label>${game.i18n.localize('NEORUEGEN.Dialog.Difficulty')}</label>
           <select name="difficulty">${buildDifficultyOptions()}</select>
-        </div>
-        <div class="combo-spend-control">
-          <label>${game.i18n.localize('NEORUEGEN.Token.Combo')}</label>
-          <div class="combo-stepper">
-            <button type="button" data-action="decrease">-</button>
-            <span class="combo-stepper-value">0</span>
-            <input type="hidden" name="combo" value="0">
-            <button type="button" data-action="increase">+</button>
-          </div>
         </div>
       </div>
       <div class="skill-request-buttons">
@@ -189,4 +257,5 @@ function addNeoRuegenControl(controls) {
 
 export function registerGMMenu() {
   Hooks.on('getSceneControlButtons', addNeoRuegenControl);
+  Hooks.on('renderChatMessage', activateRequestedCheckMessage);
 }

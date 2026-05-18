@@ -133,7 +133,8 @@
   }
 }
 
-.neoruegen-roll-dialog {
+.neoruegen-roll-dialog,
+.neoruegen-request-check-dialog {
   .form-group {
     align-items: center;
     display: flex;
@@ -172,32 +173,60 @@
     }
   }
 
-  .combo-spend-stepper {
+  .request-check-options {
+    align-items: end;
     display: grid;
-    grid-template-columns: 28px 52px 28px;
+    gap: 10px;
+    grid-template-columns: minmax(0, 1fr) 210px;
+    margin-bottom: 12px;
+  }
+}
 
-    button {
-      height: 28px;
-    }
+.neoruegen-request-check-dialog .skill-request-buttons {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
 
-    button {
-      align-items: center;
-      display: inline-flex;
-      justify-content: center;
-      line-height: 1;
-      padding: 0;
-    }
-
-    .combo-spend-value {
-      align-items: center;
-      border: 1px solid rgba(0, 0, 0, 0.32);
-      display: inline-flex;
-      height: 28px;
-      justify-content: center;
-      min-width: 0;
-    }
+.neoruegen-request-check-dialog {
+  .form-group,
+  .combo-spend-control {
+    margin-bottom: 0;
   }
 
+  .combo-spend-control {
+    border-top: 0;
+    grid-template-columns: 70px 112px;
+    padding-top: 0;
+  }
+}
+
+.combo-stepper,
+.combo-spend-stepper {
+  display: grid;
+  grid-template-columns: 28px 52px 28px;
+
+  button {
+    align-items: center;
+    display: inline-flex;
+    height: 28px;
+    justify-content: center;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .combo-stepper-value,
+  .combo-spend-value {
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.32);
+    display: inline-flex;
+    height: 28px;
+    justify-content: center;
+    min-width: 0;
+  }
+}
+
+.neoruegen-roll-dialog {
   .maneuver-list {
     display: flex;
     flex-direction: column;

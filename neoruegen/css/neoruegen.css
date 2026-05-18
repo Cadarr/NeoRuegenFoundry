@@ -422,20 +422,24 @@
   font-weight: 700;
   margin-bottom: 3px;
 }
-.neoruegen .neoruegen-roll-dialog .form-group {
+.neoruegen .neoruegen-roll-dialog .form-group,
+.neoruegen .neoruegen-request-check-dialog .form-group {
   align-items: center;
   display: flex;
   gap: 10px;
   margin-bottom: 12px;
 }
-.neoruegen .neoruegen-roll-dialog .form-group label {
+.neoruegen .neoruegen-roll-dialog .form-group label,
+.neoruegen .neoruegen-request-check-dialog .form-group label {
   flex: 0 0 110px;
   font-weight: 700;
 }
-.neoruegen .neoruegen-roll-dialog .form-group select {
+.neoruegen .neoruegen-roll-dialog .form-group select,
+.neoruegen .neoruegen-request-check-dialog .form-group select {
   flex: 1;
 }
-.neoruegen .neoruegen-roll-dialog .combo-spend-control {
+.neoruegen .neoruegen-roll-dialog .combo-spend-control,
+.neoruegen .neoruegen-request-check-dialog .combo-spend-control {
   align-items: center;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   display: grid;
@@ -444,30 +448,58 @@
   margin-bottom: 12px;
   padding-top: 10px;
 }
-.neoruegen .neoruegen-roll-dialog .combo-spend-control label {
+.neoruegen .neoruegen-roll-dialog .combo-spend-control label,
+.neoruegen .neoruegen-request-check-dialog .combo-spend-control label {
   font-weight: 700;
 }
-.neoruegen .neoruegen-roll-dialog .combo-spend-control input {
+.neoruegen .neoruegen-roll-dialog .combo-spend-control input,
+.neoruegen .neoruegen-request-check-dialog .combo-spend-control input {
   text-align: center;
 }
-.neoruegen .neoruegen-roll-dialog .combo-spend-control small {
+.neoruegen .neoruegen-roll-dialog .combo-spend-control small,
+.neoruegen .neoruegen-request-check-dialog .combo-spend-control small {
   opacity: 0.72;
 }
-.neoruegen .neoruegen-roll-dialog .combo-spend-stepper {
+.neoruegen .neoruegen-roll-dialog .request-check-options,
+.neoruegen .neoruegen-request-check-dialog .request-check-options {
+  align-items: end;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: minmax(0, 1fr) 210px;
+  margin-bottom: 12px;
+}
+.neoruegen .neoruegen-request-check-dialog .skill-request-buttons {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.neoruegen .neoruegen-request-check-dialog .form-group,
+.neoruegen .neoruegen-request-check-dialog .combo-spend-control {
+  margin-bottom: 0;
+}
+.neoruegen .neoruegen-request-check-dialog .combo-spend-control {
+  border-top: 0;
+  grid-template-columns: 70px 112px;
+  padding-top: 0;
+}
+.neoruegen .combo-stepper,
+.neoruegen .combo-spend-stepper {
   display: grid;
   grid-template-columns: 28px 52px 28px;
 }
-.neoruegen .neoruegen-roll-dialog .combo-spend-stepper button {
-  height: 28px;
-}
-.neoruegen .neoruegen-roll-dialog .combo-spend-stepper button {
+.neoruegen .combo-stepper button,
+.neoruegen .combo-spend-stepper button {
   align-items: center;
   display: inline-flex;
+  height: 28px;
   justify-content: center;
   line-height: 1;
   padding: 0;
 }
-.neoruegen .neoruegen-roll-dialog .combo-spend-stepper .combo-spend-value {
+.neoruegen .combo-stepper .combo-stepper-value,
+.neoruegen .combo-stepper .combo-spend-value,
+.neoruegen .combo-spend-stepper .combo-stepper-value,
+.neoruegen .combo-spend-stepper .combo-spend-value {
   align-items: center;
   border: 1px solid rgba(0, 0, 0, 0.32);
   display: inline-flex;

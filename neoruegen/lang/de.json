@@ -41,8 +41,9 @@
       "VeryHard": "Sehr schwierig"
     },
     "GMMenu": {
+      "ComboAvailable": "Combopunkte stehen zur Verfügung",
       "RequestCheck": "Probe fordern",
-      "RequestCheckPlaceholder": "Hier wird später die Probe konfiguriert.",
+      "RollRequestedCheck": "Ablegen",
       "Title": "NeoRügen"
     },
     "Maneuver": {

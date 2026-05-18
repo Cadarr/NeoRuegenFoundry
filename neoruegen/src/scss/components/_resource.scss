@@ -139,6 +139,54 @@
     }
   }
 
+  .combo-spend-control {
+    align-items: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    display: grid;
+    gap: 4px 10px;
+    grid-template-columns: 110px 112px 1fr;
+    margin-bottom: 12px;
+    padding-top: 10px;
+
+    label {
+      font-weight: 700;
+    }
+
+    input {
+      text-align: center;
+    }
+
+    small {
+      opacity: 0.72;
+    }
+  }
+
+  .combo-spend-stepper {
+    display: grid;
+    grid-template-columns: 28px 52px 28px;
+
+    button {
+      height: 28px;
+    }
+
+    button {
+      align-items: center;
+      display: inline-flex;
+      justify-content: center;
+      line-height: 1;
+      padding: 0;
+    }
+
+    .combo-spend-value {
+      align-items: center;
+      border: 1px solid rgba(0, 0, 0, 0.32);
+      display: inline-flex;
+      height: 28px;
+      justify-content: center;
+      min-width: 0;
+    }
+  }
+
   .maneuver-list {
     display: flex;
     flex-direction: column;

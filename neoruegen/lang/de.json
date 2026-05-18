@@ -18,6 +18,8 @@
     },
     "Dialog": {
       "Attribute": "Attribut",
+      "ComboSpend": "Combo einsetzen",
+      "ComboSpendHint": "{combo} Combo auf dem Ziel. Jeder Punkt gibt +2W12.",
       "Complexity": "Komplexität",
       "Difficulty": "Schwierigkeit",
       "NoManeuver": "Kein Manöver",

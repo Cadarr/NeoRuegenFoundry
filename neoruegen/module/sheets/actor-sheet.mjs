@@ -140,7 +140,9 @@ export class NeoruegenActorSheet extends ActorSheet {
 
     const difficultyModifier = rollOptions.difficulty?.modifier ?? 0;
     const complexity = rollOptions.maneuver?.complexity ?? 0;
-    const diceCount = Math.max(skillValue + attributeValue + difficultyModifier - complexity, 0);
+    const comboSpend = rollOptions.comboSpend ?? 0;
+    const comboDice = comboSpend * 2;
+    const diceCount = Math.max(skillValue + attributeValue + difficultyModifier - complexity + comboDice, 0);
     const formula = diceCount > 0 ? `${diceCount}d12` : '0';
     const roll = await new Roll(formula).evaluate();
     const dice = roll.dice.flatMap((die) => die.results.map((result) => result.result));
@@ -158,10 +160,11 @@ export class NeoruegenActorSheet extends ActorSheet {
       ? `${comboPoints} Combo-Punkte generiert`
       : 'Keine Combo-Punkte generiert';
     const maneuverComboCost = rollOptions.maneuver?.combo ?? 0;
+    const totalComboCost = comboSpend + maneuverComboCost;
     let spentCombo = 0;
-    if (targetDocument && maneuverComboCost > 0) {
+    if (targetDocument && totalComboCost > 0) {
       const currentCombo = getTokenPoolValue(targetDocument, COMBO_FLAG_KEY);
-      spentCombo = Math.min(currentCombo, maneuverComboCost);
+      spentCombo = Math.min(currentCombo, totalComboCost);
       await setTokenPoolValue(targetDocument, COMBO_FLAG_KEY, currentCombo - spentCombo);
     }
     if (targetDocument && comboPoints > 0) {
@@ -175,7 +178,12 @@ export class NeoruegenActorSheet extends ActorSheet {
       ? `<p>${comboPoints} Combo-Punkte auf ${targetDocument.name} hinzugefügt</p>`
       : '';
     const difficultyLine = `${game.i18n.localize(rollOptions.difficulty.label)} (${difficultyModifier >= 0 ? '+' : ''}${difficultyModifier})`;
-    const complexityLine = `${this._getComplexityLabel(complexity)} (-${complexity})`;
+    const complexityLine = complexity > 0
+      ? `<div><dt>${game.i18n.localize('NEORUEGEN.Dialog.Complexity')}</dt><dd>${this._getComplexityLabel(complexity)} (-${complexity})</dd></div>`
+      : '';
+    const comboSpendLine = comboSpend > 0
+      ? `<div><dt>${game.i18n.localize('NEORUEGEN.Token.Combo')}</dt><dd>${comboSpend} eingesetzt (+${comboDice}W12)</dd></div>`
+      : '';
     const diceLine = `${diceCount}W12 -> ${formattedDice.length ? formattedDice.join(', ') : '-'}`;
     const maneuverLine = rollOptions.maneuver
       ? `<p><strong>${game.i18n.localize(rollOptions.maneuver.label)}</strong>: ${game.i18n.localize(rollOptions.maneuver.description)}</p>`
@@ -186,7 +194,8 @@ export class NeoruegenActorSheet extends ActorSheet {
         <div><dt>${game.i18n.localize('NEORUEGEN.Dialog.Skill')}</dt><dd>${skillLabel} (${skillValue})</dd></div>
         <div><dt>${game.i18n.localize('NEORUEGEN.Dialog.Attribute')}</dt><dd>${attributeLabel} (${attributeValue})</dd></div>
         <div><dt>${game.i18n.localize('NEORUEGEN.Dialog.Difficulty')}</dt><dd>${difficultyLine}</dd></div>
-        <div><dt>${game.i18n.localize('NEORUEGEN.Dialog.Complexity')}</dt><dd>${complexityLine}</dd></div>
+        ${complexityLine}
+        ${comboSpendLine}
       </dl>
       <p>${diceLine}</p>
       <p>${resultLine}</p>
@@ -246,7 +255,7 @@ export class NeoruegenActorSheet extends ActorSheet {
             : '';
 
         return `
-          <label${classes}>
+          <label${classes} data-skill-ok="${lacksSkill ? 'false' : 'true'}" data-combo-cost="${maneuver.combo}">
             <input type="radio" name="maneuver" value="${maneuver.key}"${disabled}>
             <span>
               <strong>${game.i18n.localize(maneuver.label)}</strong>
@@ -257,25 +266,37 @@ export class NeoruegenActorSheet extends ActorSheet {
           </label>
         `;
       }).join('')
-      : `<p class="maneuver-empty">${game.i18n.localize('NEORUEGEN.Dialog.NoManeuvers')}</p>`;
+      : '';
+    const comboSpendControl = targetCombo > 0
+      ? `
+        <div class="combo-spend-control">
+          <label>${game.i18n.localize('NEORUEGEN.Dialog.ComboSpend')}</label>
+          <div class="combo-spend-stepper">
+            <button type="button" data-action="decrease">-</button>
+            <span class="combo-spend-value">0</span>
+            <input type="hidden" name="comboSpend" value="0">
+            <button type="button" data-action="increase">+</button>
+          </div>
+          <small>${game.i18n.format('NEORUEGEN.Dialog.ComboSpendHint', { combo: targetCombo })}</small>
+        </div>
+      `
+      : '';
+    const maneuverList = maneuverRows
+      ? `<div class="maneuver-list">${maneuverRows}</div>`
+      : '';
     const content = `
       <form class="neoruegen-roll-dialog">
         <div class="form-group">
           <label>${game.i18n.localize('NEORUEGEN.Dialog.Difficulty')}</label>
           <select name="difficulty">${difficultyOptions}</select>
         </div>
-        <div class="maneuver-list">
-          <label class="maneuver-option">
-            <input type="radio" name="maneuver" value="" checked>
-            <span>${game.i18n.localize('NEORUEGEN.Dialog.NoManeuver')}</span>
-          </label>
-          ${maneuverRows}
-        </div>
+        ${comboSpendControl}
+        ${maneuverList}
       </form>
     `;
 
     return new Promise((resolve) => {
-      new Dialog({
+      const dialog = new Dialog({
         title: game.i18n.localize('NEORUEGEN.Dialog.SkillCheck'),
         content,
         buttons: {
@@ -285,10 +306,14 @@ export class NeoruegenActorSheet extends ActorSheet {
               const element = html instanceof HTMLElement ? html : html[0];
               const form = element.querySelector('.neoruegen-roll-dialog');
               const difficultyKey = form.querySelector('[name="difficulty"]').value;
-              const maneuverKey = form.querySelector('[name="maneuver"]:checked').value;
+              const comboSpendInput = form.querySelector('[name="comboSpend"]');
+              const comboSpend = Math.clamp(Number(comboSpendInput?.value) || 0, 0, targetCombo);
+              const maneuverInput = form.querySelector('[name="maneuver"]:checked:not(:disabled)');
+              const maneuverKey = maneuverInput?.value ?? '';
               resolve({
                 difficulty: CONFIG.NEORUEGEN.difficulties[difficultyKey],
                 maneuver: maneuvers.find((maneuver) => maneuver.key === maneuverKey) ?? null,
+                comboSpend,
               });
             },
           },
@@ -298,10 +323,55 @@ export class NeoruegenActorSheet extends ActorSheet {
           },
         },
         default: 'roll',
+        render: (html) => this._activateRollDialogListeners(html, targetCombo),
         close: () => resolve(null),
       }, {
         classes: ['neoruegen', 'dialog'],
-      }).render(true);
+      });
+      dialog.render(true);
     });
+  }
+
+  _activateRollDialogListeners(html, targetCombo) {
+    const element = html instanceof HTMLElement ? html : html[0];
+    const form = element.querySelector('.neoruegen-roll-dialog');
+    const comboSpendInput = form?.querySelector('[name="comboSpend"]');
+    const comboSpendValue = form?.querySelector('.combo-spend-value');
+    const comboSpendButtons = Array.from(form?.querySelectorAll('.combo-spend-stepper button') ?? []);
+    const maneuverOptions = Array.from(form?.querySelectorAll('.maneuver-option') ?? []);
+
+    if (!comboSpendInput) return;
+
+    const updateManeuvers = () => {
+      const comboSpend = Math.clamp(Number(comboSpendInput.value) || 0, 0, targetCombo);
+      comboSpendInput.value = comboSpend;
+      comboSpendValue.textContent = String(comboSpend);
+      const remainingCombo = targetCombo - comboSpend;
+
+      for (const option of maneuverOptions) {
+        const input = option.querySelector('[name="maneuver"]');
+        const skillOk = option.dataset.skillOk === 'true';
+        const comboCost = Number(option.dataset.comboCost) || 0;
+        const disabled = !skillOk || remainingCombo < comboCost;
+
+        option.classList.toggle('disabled', disabled);
+        input.disabled = disabled;
+        if (disabled && input.checked) input.checked = false;
+      }
+    };
+
+    comboSpendInput.addEventListener('input', updateManeuvers);
+    comboSpendInput.addEventListener('change', updateManeuvers);
+    for (const button of comboSpendButtons) {
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        const current = Number(comboSpendInput.value) || 0;
+        comboSpendInput.value = event.currentTarget.dataset.action === 'increase'
+          ? Math.min(current + 1, targetCombo)
+          : Math.max(current - 1, 0);
+        updateManeuvers();
+      });
+    }
+    updateManeuvers();
   }
 }

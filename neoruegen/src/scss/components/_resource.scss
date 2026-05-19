@@ -137,28 +137,27 @@
 .neoruegen-request-check-dialog {
   .form-group {
     align-items: center;
-    display: flex;
+    display: grid;
     gap: 10px;
+    grid-template-columns: 110px 112px 1fr;
     margin-bottom: 12px;
 
     label {
-      flex: 0 0 110px;
       font-weight: 700;
     }
 
     select {
-      flex: 1;
+      grid-column: 2 / -1;
     }
   }
 
-  .combo-spend-control {
+  .combo-spend-control,
+  .combo-pool-control {
     align-items: center;
-    border-top: 1px solid rgba(0, 0, 0, 0.12);
     display: grid;
     gap: 4px 10px;
     grid-template-columns: 110px 112px 1fr;
     margin-bottom: 12px;
-    padding-top: 10px;
 
     label {
       font-weight: 700;
@@ -171,6 +170,11 @@
     small {
       opacity: 0.72;
     }
+  }
+
+  .combo-spend-control {
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+    padding-top: 10px;
   }
 
   .request-check-options {
@@ -202,7 +206,8 @@
 }
 
 .combo-stepper,
-.combo-spend-stepper {
+.combo-spend-stepper,
+.combo-pool-stepper {
   display: grid;
   grid-template-columns: 28px 52px 28px;
 
@@ -216,7 +221,8 @@
   }
 
   .combo-stepper-value,
-  .combo-spend-value {
+  .combo-spend-value,
+  .combo-pool-value {
     align-items: center;
     border: 1px solid rgba(0, 0, 0, 0.32);
     display: inline-flex;

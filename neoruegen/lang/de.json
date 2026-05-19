@@ -18,6 +18,7 @@
     },
     "Dialog": {
       "Attribute": "Attribut",
+      "ComboPool": "Combo für Probe",
       "ComboSpend": "Combo einsetzen",
       "ComboSpendHint": "{combo} Combo auf dem Ziel. Jeder Punkt gibt +2W12.",
       "ComboSpendNoTargetHint": "Bis zu {combo} Combo. Jeder Punkt gibt +2W12.",

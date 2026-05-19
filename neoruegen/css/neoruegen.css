@@ -425,40 +425,51 @@
 .neoruegen .neoruegen-roll-dialog .form-group,
 .neoruegen .neoruegen-request-check-dialog .form-group {
   align-items: center;
-  display: flex;
+  display: grid;
   gap: 10px;
+  grid-template-columns: 110px 112px 1fr;
   margin-bottom: 12px;
 }
 .neoruegen .neoruegen-roll-dialog .form-group label,
 .neoruegen .neoruegen-request-check-dialog .form-group label {
-  flex: 0 0 110px;
   font-weight: 700;
 }
 .neoruegen .neoruegen-roll-dialog .form-group select,
 .neoruegen .neoruegen-request-check-dialog .form-group select {
-  flex: 1;
+  grid-column: 2/-1;
 }
 .neoruegen .neoruegen-roll-dialog .combo-spend-control,
-.neoruegen .neoruegen-request-check-dialog .combo-spend-control {
+.neoruegen .neoruegen-roll-dialog .combo-pool-control,
+.neoruegen .neoruegen-request-check-dialog .combo-spend-control,
+.neoruegen .neoruegen-request-check-dialog .combo-pool-control {
   align-items: center;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
   display: grid;
   gap: 4px 10px;
   grid-template-columns: 110px 112px 1fr;
   margin-bottom: 12px;
-  padding-top: 10px;
 }
 .neoruegen .neoruegen-roll-dialog .combo-spend-control label,
-.neoruegen .neoruegen-request-check-dialog .combo-spend-control label {
+.neoruegen .neoruegen-roll-dialog .combo-pool-control label,
+.neoruegen .neoruegen-request-check-dialog .combo-spend-control label,
+.neoruegen .neoruegen-request-check-dialog .combo-pool-control label {
   font-weight: 700;
 }
 .neoruegen .neoruegen-roll-dialog .combo-spend-control input,
-.neoruegen .neoruegen-request-check-dialog .combo-spend-control input {
+.neoruegen .neoruegen-roll-dialog .combo-pool-control input,
+.neoruegen .neoruegen-request-check-dialog .combo-spend-control input,
+.neoruegen .neoruegen-request-check-dialog .combo-pool-control input {
   text-align: center;
 }
 .neoruegen .neoruegen-roll-dialog .combo-spend-control small,
-.neoruegen .neoruegen-request-check-dialog .combo-spend-control small {
+.neoruegen .neoruegen-roll-dialog .combo-pool-control small,
+.neoruegen .neoruegen-request-check-dialog .combo-spend-control small,
+.neoruegen .neoruegen-request-check-dialog .combo-pool-control small {
   opacity: 0.72;
+}
+.neoruegen .neoruegen-roll-dialog .combo-spend-control,
+.neoruegen .neoruegen-request-check-dialog .combo-spend-control {
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  padding-top: 10px;
 }
 .neoruegen .neoruegen-roll-dialog .request-check-options,
 .neoruegen .neoruegen-request-check-dialog .request-check-options {
@@ -483,12 +494,14 @@
   padding-top: 0;
 }
 .neoruegen .combo-stepper,
-.neoruegen .combo-spend-stepper {
+.neoruegen .combo-spend-stepper,
+.neoruegen .combo-pool-stepper {
   display: grid;
   grid-template-columns: 28px 52px 28px;
 }
 .neoruegen .combo-stepper button,
-.neoruegen .combo-spend-stepper button {
+.neoruegen .combo-spend-stepper button,
+.neoruegen .combo-pool-stepper button {
   align-items: center;
   display: inline-flex;
   height: 28px;
@@ -498,8 +511,13 @@
 }
 .neoruegen .combo-stepper .combo-stepper-value,
 .neoruegen .combo-stepper .combo-spend-value,
+.neoruegen .combo-stepper .combo-pool-value,
 .neoruegen .combo-spend-stepper .combo-stepper-value,
-.neoruegen .combo-spend-stepper .combo-spend-value {
+.neoruegen .combo-spend-stepper .combo-spend-value,
+.neoruegen .combo-spend-stepper .combo-pool-value,
+.neoruegen .combo-pool-stepper .combo-stepper-value,
+.neoruegen .combo-pool-stepper .combo-spend-value,
+.neoruegen .combo-pool-stepper .combo-pool-value {
   align-items: center;
   border: 1px solid rgba(0, 0, 0, 0.32);
   display: inline-flex;
